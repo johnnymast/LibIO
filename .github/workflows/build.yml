@@ -19,6 +19,7 @@ jobs:
 
       - name: Add Kitware APT repository and install CMake 4
         run: |
+          cmake --version
           # Voeg de Kitware GPG-sleutel toe
           curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc | \
             gpg --dearmor | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg > /dev/null
