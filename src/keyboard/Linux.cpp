@@ -116,6 +116,7 @@ namespace LibIO::Keyboard {
             }
         }
 
+
         Display *display = GetDisplay();
         try {
             std::string lowerKey = ToLower(key);
