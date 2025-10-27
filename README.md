@@ -20,35 +20,35 @@ This library is designed to be used by C++17/20 projects. It is organized to int
 ## Features
 
 - Keyboard control:
-    - Press keys by name or character
-    - Support for modifiers (Ctrl, Shift, Alt, etc.)
-    - Support for special keys (Enter, Escape, Backspace, arrows, etc.)
+  - Press keys by name or character
+  - Support for modifiers (Ctrl, Shift, Alt, etc.)
+  - Support for special keys (Enter, Escape, Backspace, arrows, etc.)
 - Mouse control:
-    - Move cursor
-    - Click (left, right)
-    - Scroll wheel
-    - Move and click in a single operation
+  - Move cursor
+  - Click (left, right)
+  - Scroll wheel
+  - Move and click in a single operation
 - Platform abstractions:
-    - Windows and Linux (X11) implementations
+  - Windows and Linux (X11) implementations
 - Lightweight and header-friendly usage patterns
 - Simple build via CMake
 
 ## Build and Usage
 
 - Prerequisites
-    - A C++ toolchain (GCC/Clang/MSVC)
-    - CMake
-    - For Linux: X11 development libraries (Xlib, XTest)
+  - A C++ toolchain (GCC/Clang/MSVC)
+  - CMake
+  - For Linux: X11 development libraries (Xlib, XTest)
 
 - Typical build steps (from repository root)
-    - mkdir -p build
-    - cd build
-    - cmake ..
-    - make -j
+  - mkdir -p build
+  - cd build
+  - cmake ..
+  - make -j
 
 - Integration
-    - Include headers from LibIO in your own project
-    - Link against the generated library target (as defined by the repository’s CMake setup)
+  - Include headers from LibIO in your own project
+  - Link against the generated library target (as defined by the repository’s CMake setup)
 
 Note: This readme focuses on the libio component and its use within the repository context. If you need example usage code, I can provide minimal sample snippets for Windows and Linux.
 
@@ -58,8 +58,8 @@ Arch Linux users can install the necessary system dependencies and build libio w
 
 1) Install required system packages
 - Install base development tools and X11 libraries:
-    - sudo pacman -Syu --needed base-devel cmake
-    - sudo pacman -S libx11 libxtst
+  - sudo pacman -Syu --needed base-devel cmake
+  - sudo pacman -S libx11 libxtst
 
 2) Clone or fetch the project sources
 - git clone <repository-url> libio
@@ -70,10 +70,6 @@ Arch Linux users can install the necessary system dependencies and build libio w
 - cd build
 - cmake ..
 - make -j
-
-4) Optional: run tests or examples (if provided in the repo)
-- cmake --build . --target test
-- cmake --build . --target <example-target>
 
 Tips:
 - Ensure your system has a working X11 session when building for Linux.
