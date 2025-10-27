@@ -1,6 +1,5 @@
 name: Build
 
-
 on:
   push:
   pull_request:
@@ -16,32 +15,21 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential pkg-config libx11-dev libxtst-dev
-          
+          sudo apt-get install -y build-essential pkg-config libx11-dev libxtst-dev ca-certificates gpg wget
 
-      - name: Install CMake 4 (kitware repository)
-        run: | 
+      - name: Add Kitware APT repository and install CMake 4
+        run: |
+          # Voeg de Kitware GPG-sleutel toe
+          curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc | \
+            gpg --dearmor | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg > /dev/null
+
+          # Voeg de repository toe met keyring-verificatie
+          echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main" | \
+            sudo tee /etc/apt/sources.list.d/kitware.list > /dev/null
+
+          # Update en installeer CMake
           sudo apt-get update
-          sudo apt-get install ca-certificates gpg wget
-          echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main' | sudo tee /etc/apt/sources.list.d/kitware.list >/dev/null
-          sudo apt-get update
-          test -f /usr/share/doc/kitware-archive-keyring/copyright ||
-          sudo rm /usr/share/keyrings/kitware-archive-keyring.gpg
-          sudo apt-get install kitware-archive-keyring
-          echo 'deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble-rc main' | sudo tee -a /etc/apt/sources.list.d/kitware.list >/dev/null
-          sudo apt-get update
-#          sudo apt-get update
-#          sudo apt-get remove -y cmake || true
-#          sudo apt-get update
-#          sudo apt-get install -y build-essential curl
-#          cmake_version=4.1.2
-#          curl -LO https://github.com/Kitware/CMake/releases/download/v4.1.2/cmake-4.1.2.tar.gz
-#          tar -xzf cmake-4.1.2.tar.gz
-#          cd cmake-4.1.2
-#          ./bootstrap
-#          make -j$(nproc)
-#          sudo make install
-#          cmake --version
+          sudo apt-get install -y cmake
 
       - name: Configure
         run: |
