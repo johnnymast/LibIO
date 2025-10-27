@@ -23,11 +23,16 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get remove -y cmake || true
-          sudo apt-get install -y apt-transport-https ca-certificates gnupg
-          sudo curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc | sudo gpg --dearmor -o /usr/share/keyrings/kitware-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/kitware.list > /dev/null
           sudo apt-get update
-          sudo apt-get install -y cmake
+          sudo apt-get install -y build-essential curl
+          cmake_version=4.3.0
+          curl -LO https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}.tar.gz
+          tar -xzf cmake-${cmake_version}.tar.gz
+          cd cmake-${cmake_version}
+          ./bootstrap
+          make -j$(nproc)
+          sudo make install
+          cmake --version
 
       - name: Configure
         run: |
