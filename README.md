@@ -41,7 +41,6 @@ This library is designed to be used by C++17/20 projects. It is organized to int
   - For Linux: X11 development libraries (Xlib, XTest)
 
 - Typical build steps (from repository root)
-  - mkdir -p build
   - cd build
   - cmake ..
   - make -j
