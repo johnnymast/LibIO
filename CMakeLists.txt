@@ -19,11 +19,11 @@ add_library(${PROJECT_NAME} SHARED
         include/LibIO/mouse/Windows.hpp
         include/LibIO/mouse/Linux.hpp
 
-
         src/keyboard/KeyboardControls.cpp
         src/keyboard/Windows.cpp
         src/keyboard/Linux.cpp
 
+        src/mouse/MouseControls.cpp
         src/mouse/Windows.cpp
         src/mouse/Linux.cpp
 

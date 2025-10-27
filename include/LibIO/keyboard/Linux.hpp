@@ -9,8 +9,7 @@
 namespace LibIO::Keyboard {
     class Linux final : public KeyboardControls {
     public:
-        Linux() = default;
-        ~Linux() override;
+        ~Linux() override = default;
 
         void PressKey(const std::string &key) override;
         void Hotkey(const std::string &modifier, const std::string &key) override;
