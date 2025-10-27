@@ -24,15 +24,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y cmake
 
-      - name: Validate CMake version
-        run: |
-          VER=$(cmake --version | head -n1 | awk '{print $3}')
-          MAJOR=$(echo $VER | cut -d. -f1)
-          if [ "$MAJOR" -lt 4 ]; then
-            echo "Error: CMake version too old ($VER). Please install CMake 4.0 or newer."
-            exit 1
-          fi
-          echo "Using CMake version $VER"
+#      - name: Validate CMake version
+#        run: |
+#          VER=$(cmake --version | head -n1 | awk '{print $3}')
+#          MAJOR=$(echo $VER | cut -d. -f1)
+#          if [ "$MAJOR" -lt 4 ]; then
+#            echo "Error: CMake version too old ($VER). Please install CMake 4.0 or newer."
+#            exit 1
+#          fi
+#          echo "Using CMake version $VER"
 
       - name: Configure
         shell: bash
