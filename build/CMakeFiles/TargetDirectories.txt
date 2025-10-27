@@ -1,3 +1,0 @@
-/home/johnny/CLionProjects/sparklelibs/io/build/CMakeFiles/IO.dir
-/home/johnny/CLionProjects/sparklelibs/io/build/CMakeFiles/edit_cache.dir
-/home/johnny/CLionProjects/sparklelibs/io/build/CMakeFiles/rebuild_cache.dir
