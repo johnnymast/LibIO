@@ -17,21 +17,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y build-essential pkg-config libx11-dev libxtst-dev ca-certificates gpg wget
 
+      - name: Remove system CMake
+        run: |
+          sudo apt-get remove -y cmake || true
+
       - name: Add Kitware APT repository and install CMake 4
         run: |
+          curl -LO https://github.com/Kitware/CMake/releases/download/v4.1.2/cmake-4.1.2-linux-x86_64.sh
+          chmod +x cmake-4.1.2-linux-x86_64.sh
+          sudo ./cmake-4.1.2-linux-x86_64.sh --skip-license --prefix=/usr/local
           cmake --version
-          sudo apt-get remove -y cmake
-          # Voeg de Kitware GPG-sleutel toe
-          curl -fsSL https://apt.kitware.com/keys/kitware-archive-latest.asc | \
-            gpg --dearmor | sudo tee /usr/share/keyrings/kitware-archive-keyring.gpg > /dev/null
-
-          # Voeg de repository toe met keyring-verificatie
-          echo "deb [signed-by=/usr/share/keyrings/kitware-archive-keyring.gpg] https://apt.kitware.com/ubuntu/ noble main" | \
-            sudo tee /etc/apt/sources.list.d/kitware.list > /dev/null
-
-          # Update en installeer CMake
-          sudo apt-get update
-          sudo apt-get install -y cmake
 
       - name: Configure
         run: |
