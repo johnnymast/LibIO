@@ -15,13 +15,21 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential pkg-config libx11-dev libxtst-dev ca-certificates gpg wget
+          sudo apt-get install -y \
+            build-essential \
+            pkg-config \
+            libx11-dev \
+            libxtst-dev \
+            libxrandr-dev \
+            ca-certificates \
+            gpg \
+            wget
 
       - name: Remove system CMake
         run: |
           sudo apt-get remove -y cmake || true
 
-      - name: Add Kitware APT repository and install CMake 4
+      - name: Install CMake 4.1.2 manually
         run: |
           curl -LO https://github.com/Kitware/CMake/releases/download/v4.1.2/cmake-4.1.2-linux-x86_64.sh
           chmod +x cmake-4.1.2-linux-x86_64.sh
@@ -30,11 +38,8 @@ jobs:
 
       - name: Configure
         run: |
-          cmake --version
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         run: |
           cmake --build build --config Release -- -j$(nproc)
-
-
