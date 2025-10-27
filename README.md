@@ -1,3 +1,13 @@
+<div align="center">
+
+<img src="assets/logo.png" height="300" alt="banner">
+
+![C++17+](https://img.shields.io/badge/C++-17%2B-blue.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests](https://github.com/johnnymast/LibGraphics/actions/workflows/testing.yml/badge.svg)](https://github.com/johnnymast/LibGraphics/actions/workflows/testing.yml)
+</div>
+
+
 # LibIO
 
 A cross-platform library to control input devices (mouse and keyboard) on Windows and Linux environments.
