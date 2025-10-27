@@ -6,10 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-# Optional Wayland toggle
-option(WAYLAND "Enable Wayland support via DBus portal" ON)
-
-
 add_library(${PROJECT_NAME} SHARED
         include/LibIO/keyboard/KeyboardControls.hpp
         include/LibIO/keyboard/Windows.hpp
@@ -27,10 +23,8 @@ add_library(${PROJECT_NAME} SHARED
         src/mouse/Windows.cpp
         src/mouse/Linux.cpp
 
-
         include/LibIO/LibIO.hpp
 )
-
 
 # Platform detection
 if(WIN32)
@@ -47,13 +41,9 @@ else()
     message(WARNING "⚠️ Unknown platform: ${CMAKE_SYSTEM_NAME}")
 endif()
 
-
-
 target_include_directories(${PROJECT_NAME}
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-
-
 
 include(X11)
