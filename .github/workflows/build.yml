@@ -25,10 +25,10 @@ jobs:
           sudo apt-get remove -y cmake || true
           sudo apt-get update
           sudo apt-get install -y build-essential curl
-          cmake_version=4.3.0
-          curl -LO https://github.com/Kitware/CMake/releases/download/v${cmake_version}/cmake-${cmake_version}.tar.gz
-          tar -xzf cmake-${cmake_version}.tar.gz
-          cd cmake-${cmake_version}
+          cmake_version=4.1.2
+          curl -LO https://github.com/Kitware/CMake/releases/download/v4.1.2/cmake-4.1.2.tar.gz
+          tar -xzf cmake-4.1.2.tar.gz
+          cd cmake-4.1.2
           ./bootstrap
           make -j$(nproc)
           sudo make install
