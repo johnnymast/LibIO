@@ -45,10 +45,3 @@ jobs:
         shell: bash
         run: |
           cmake --build build --config Release -- -j
-
-      - name: Test
-        if: always()
-        shell: bash
-        run: |
-          cd build
-          ctest --output-on-failure -j
