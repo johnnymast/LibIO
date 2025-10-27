@@ -1,28 +1,27 @@
-name: CI
+name: Build
+
 
 on:
   push:
   pull_request:
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install Dependencies (Linux)
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl software-properties-common lsb-release
-          sudo apt-get install -y build-essential cmake
-
+          sudo apt-get install -y cmake build-essential pkg-config
 
       - name: Configure
-        shell: bash
         run: |
-          cd build
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
-        shell: bash
         run: |
-          cmake --build build --config Release -- -j
+          cmake --build build --config Release -- -j$(nproc)
