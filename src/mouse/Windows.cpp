@@ -29,7 +29,7 @@ namespace LibIO::Mouse {
         RightClick();
     }
 
-    void Windows::Scroll(int amount, int* x, int* y) {
+    void Windows::Scroll(int amount, int* x = nullptr, int* y = nullptr) {
         if (x != nullptr && y != nullptr) {
             MoveCursor(*x, *y);
         }
@@ -37,12 +37,12 @@ namespace LibIO::Mouse {
         mouse_event(MOUSEEVENTF_WHEEL, 0, 0, (UINT)(amount * WHEEL_DELTA), 0);
     }
 
-    void Windows::ScrollUp(int amount) {
-        Scroll(amount);
+    void Windows::ScrollUp(int amount {
+        Scroll(amount, nullptr, nullptr);
     }
 
     void Windows::ScrollDown(int amount) {
-        Scroll(-amount);
+        Scroll(-amount,nullptr, nullptr);
     }
 }
 #endif

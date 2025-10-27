@@ -9,15 +9,17 @@
 #include "LibIO/mouse/Windows.hpp"
 #define MOUSE_CLASS() new LibIO::Mouse::Windows();
 #elif PLATFORM_LINUX
-#include "LibIO/mouse/Linux.hpp"
-#include "LibIO/mouse/Linux.hpp"
 
-#define MouseControleInstance() new LibIO::Mouse::Linux();
-#define KeyboadControleInstance() new ScreenshotWin32();
+    #include "LibIO/mouse/Linux.hpp"
+    #include "LibIO/keyboard/Linux.hpp"
+
+    #define MouseControleInstance() new LibIO::Mouse::Linux();
+    #define KeyboadControleInstance() new ScreenshotWin32();
 //
 // #include "../../../src/mouse/Linux.hpp"
 // #include "../../../src/mouse/keyboard.hpp"
 #else
 // #   pragma message("✅ OOPS")
-#define MOUSE_CLASS() nullptr
+#define MouseControleInstance() nullptr
+#define KeyboadControleInstance() nullptr
 #endif

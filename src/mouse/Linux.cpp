@@ -1,5 +1,6 @@
 #include "LibIO/mouse/Linux.hpp"
 
+#if PLATFORM_LINUX
 #include <cstdint>
 #include <stdexcept>
 #include <X11/Xlib.h>
@@ -101,10 +102,11 @@ namespace LibIO::Mouse {
     }
 
     void Linux::ScrollUp(const int amount) {
-        Scroll(amount);
+        Scroll(amount, nullptr, nullptr);
     }
 
     void Linux::ScrollDown(const int amount) {
-        Scroll(-amount);
+        Scroll(-amount, nullptr, nullptr);
     }
 }
+#endif

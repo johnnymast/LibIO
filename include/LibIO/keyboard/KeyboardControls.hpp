@@ -7,8 +7,8 @@ namespace LibIO::Keyboard {
     public:
         virtual ~KeyboardControls() = default;
 
-        virtual void PressKey(std::string key) = 0;
+        virtual void PressKey(const std::string& key);
 
-        virtual void Hotkey(std::string modifier, std::string key) = 0;
+        virtual void Hotkey(const std::string &modifier, const std::string &key);
     };
 }
