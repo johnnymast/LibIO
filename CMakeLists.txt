@@ -33,7 +33,7 @@ elseif(UNIX)
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
         target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_LINUX)
     endif()
-=endif()
+endif()
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
