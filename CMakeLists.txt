@@ -28,18 +28,12 @@ add_library(${PROJECT_NAME} SHARED
 
 # Platform detection
 if(WIN32)
-    message(STATUS "🖥️ Detected Windows platform")
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_WINDOWS)
 elseif(UNIX)
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-        message(STATUS "🐧 Detected Linux platform")
         target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_LINUX)
-    else()
-        message(WARNING "⚠️ Unknown UNIX-like platform: ${CMAKE_SYSTEM_NAME}")
     endif()
-else()
-    message(WARNING "⚠️ Unknown platform: ${CMAKE_SYSTEM_NAME}")
-endif()
+=endif()
 
 target_include_directories(${PROJECT_NAME}
         PUBLIC
