@@ -37,7 +37,7 @@ namespace LibIO::Mouse {
         mouse_event(MOUSEEVENTF_WHEEL, 0, 0, (UINT)(amount * WHEEL_DELTA), 0);
     }
 
-    void Windows::ScrollUp(int amount {
+    void Windows::ScrollUp(int amount) {
         Scroll(amount, nullptr, nullptr);
     }
 

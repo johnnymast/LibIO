@@ -3,6 +3,7 @@
 #include "LibIO/internals/export.hpp"
 #include "MouseControls.hpp"
 
+#if PLATFORM_WINDOWS
 namespace LibIO::Mouse {
     class LIBGRAPHICS_API Windows final : public MouseControls {
     public:
@@ -19,4 +20,4 @@ namespace LibIO::Mouse {
         void ScrollDown(int amount) override;
     };
 }
-
+#endif
