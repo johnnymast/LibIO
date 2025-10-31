@@ -30,7 +30,7 @@ namespace LibIO {
 #if defined(PLATFORM_WINDOWS)
         return return LibIO::Mouse::Windows::getInstance();
 #elif defined(PLATFORM_LINUX)
-        return LibIO::Mouse::Linux::getInstance();
+        return &LibIO::Mouse::Linux::getInstance();
 #else
         return nullptr;
 #endif
@@ -40,7 +40,7 @@ namespace LibIO {
 #if defined(PLATFORM_WINDOWS)
         return LibIO::Keyboard::Windows::getInstance();
 #elif defined(PLATFORM_LINUX)
-        return LibIO::Keyboard::Linux::getInstance();
+        return &LibIO::Keyboard::Linux::getInstance();
 #else
         return nullptr;
 #endif
