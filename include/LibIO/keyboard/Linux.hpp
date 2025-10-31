@@ -4,6 +4,7 @@
 
 #include "KeyboardControls.hpp"
 
+#if defined(PLATFORM_LINUX)
 #include <X11/Xlib.h>
 
 namespace LibIO::Keyboard {
@@ -23,3 +24,4 @@ namespace LibIO::Keyboard {
         Linux() = default;
     };
 }
+#endif

@@ -3,6 +3,7 @@
 #include "LibIO/internals/export.hpp"
 #include "MouseControls.hpp"
 
+#if defined(PLATFORM_LINUX)
 #include <X11/Xlib.h>
 
 namespace LibIO::Mouse {
@@ -26,4 +27,4 @@ namespace LibIO::Mouse {
         static Display* GetDisplay();
     };
 }
-
+#endif

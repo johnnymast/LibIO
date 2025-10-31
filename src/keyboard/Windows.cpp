@@ -12,49 +12,48 @@
 #include <algorithm>
 
 namespace LibIO::Keyboard {
-    static void Windows::Initialize() {
-        KeyCodes = {
-            // Function keys
-            {"f1", 0x70}, {"f2", 0x71}, {"f3", 0x72}, {"f4", 0x73},
-            {"f5", 0x74}, {"f6", 0x75}, {"f7", 0x76}, {"f8", 0x77},
-            {"f9", 0x78}, {"f10", 0x79}, {"f11", 0x7A}, {"f12", 0x7B},
 
-            // Special keys
-            {"enter", 0x0D}, {"esc", 0x1B}, {"escape", 0x1B},
-            {"tab", 0x09}, {"space", 0x20}, {"backspace", 0x08},
-            {"delete", 0x2E}, {"insert", 0x2D}, {"home", 0x24},
-            {"end", 0x23}, {"pageup", 0x21}, {"pagedown", 0x22},
+    const std::unordered_map<std::string, uint8_t> Windows::KeyCodes = {
+        // Function keys
+        { "f1", 0x70 }, { "f2", 0x71 }, { "f3", 0x72 }, { "f4", 0x73 },
+        { "f5", 0x74 }, { "f6", 0x75 }, { "f7", 0x76 }, { "f8", 0x77 },
+        { "f9", 0x78 }, { "f10", 0x79 }, { "f11", 0x7A }, { "f12", 0x7B },
 
-            // Arrow keys
-            {"left", 0x25}, {"up", 0x26}, {"right", 0x27}, {"down", 0x28},
+        // Special keys
+        { "enter", 0x0D }, { "esc", 0x1B }, { "escape", 0x1B },
+        { "tab", 0x09 }, { "space", 0x20 }, { "backspace", 0x08 },
+        { "delete", 0x2E }, { "insert", 0x2D }, { "home", 0x24 },
+        { "end", 0x23 }, { "pageup", 0x21 }, { "pagedown", 0x22 },
 
-            // Modifier keys
-            {"shift", 0x10}, {"ctrl", 0x11}, {"control", 0x11},
-            {"alt", 0x12}, {"win", 0x5B}, {"windows", 0x5B},
+        // Arrow keys
+        { "left", 0x25 }, { "up", 0x26 }, { "right", 0x27 }, { "down", 0x28 },
 
-            // Lock keys
-            {"capslock", 0x14}, {"numlock", 0x90}, {"scrolllock", 0x91},
+        // Modifier keys
+        { "shift", 0x10 }, { "ctrl", 0x11 }, { "control", 0x11 },
+        { "alt", 0x12 }, { "win", 0x5B }, { "windows", 0x5B },
 
-            // Punctuation
-            {",", 0xBC}, {".", 0xBE}, {"/", 0xBF}, {";", 0xBA},
-            {"'", 0xDE}, {"[", 0xDB}, {"]", 0xDD}, {"-", 0xBD},
-            {"=", 0xBB}, {"`", 0xC0}, {"\\", 0xDC},
+        // Lock keys
+        { "capslock", 0x14 }, { "numlock", 0x90 }, { "scrolllock", 0x91 },
 
-            // Numbers
-            {"0", 0x30}, {"1", 0x31}, {"2", 0x32}, {"3", 0x33},
-            {"4", 0x34}, {"5", 0x35}, {"6", 0x36}, {"7", 0x37},
-            {"8", 0x38}, {"9", 0x39},
+        // Punctuation
+        { ",", 0xBC }, { ".", 0xBE }, { "/", 0xBF }, { ";", 0xBA },
+        { "'", 0xDE }, { "[", 0xDB }, { "]", 0xDD }, { "-", 0xBD },
+        { "=", 0xBB }, { "`", 0xC0 }, { "\\", 0xDC },
 
-            // Letters
-            {"a", 0x41}, {"b", 0x42}, {"c", 0x43}, {"d", 0x44},
-            {"e", 0x45}, {"f", 0x46}, {"g", 0x47}, {"h", 0x48},
-            {"i", 0x49}, {"j", 0x4A}, {"k", 0x4B}, {"l", 0x4C},
-            {"m", 0x4D}, {"n", 0x4E}, {"o", 0x4F}, {"p", 0x50},
-            {"q", 0x51}, {"r", 0x52}, {"s", 0x53}, {"t", 0x54},
-            {"u", 0x55}, {"v", 0x56}, {"w", 0x57}, {"x", 0x58},
-            {"y", 0x59}, {"z", 0x5A}
-        };
-    }
+        // Numbers
+        { "0", 0x30 }, { "1", 0x31 }, { "2", 0x32 }, { "3", 0x33 },
+        { "4", 0x34 }, { "5", 0x35 }, { "6", 0x36 }, { "7", 0x37 },
+        { "8", 0x38 }, { "9", 0x39 },
+
+        // Letters
+        { "a", 0x41 }, { "b", 0x42 }, { "c", 0x43 }, { "d", 0x44 },
+        { "e", 0x45 }, { "f", 0x46 }, { "g", 0x47 }, { "h", 0x48 },
+        { "i", 0x49 }, { "j", 0x4A }, { "k", 0x4B }, { "l", 0x4C },
+        { "m", 0x4D }, { "n", 0x4E }, { "o", 0x4F }, { "p", 0x50 },
+        { "q", 0x51 }, { "r", 0x52 }, { "s", 0x53 }, { "t", 0x54 },
+        { "u", 0x55 }, { "v", 0x56 }, { "w", 0x57 }, { "x", 0x58 },
+        { "y", 0x59 }, { "z", 0x5A }
+    };
 
     Windows& Windows::getInstance() {
         static Windows instance;
@@ -62,7 +61,7 @@ namespace LibIO::Keyboard {
     }
 
     // Convert a string to lowercase
-    static std::string ToLower(const std::string &input) {
+    std::string Windows::ToLower(const std::string &input) {
         std::string result = input;
         std::transform(result.begin(), result.end(), result.begin(),
                        [](unsigned char c) { return std::tolower(c); });
@@ -70,7 +69,7 @@ namespace LibIO::Keyboard {
     }
 
     // Press a key by name
-    static void PressKey(const std::string &key) {
+    void Windows::PressKey(const std::string &key) {
         std::string lowerKey = ToLower(key);
 
         BYTE virtualKey = 0;
@@ -110,7 +109,7 @@ namespace LibIO::Keyboard {
     }
 
     // Press a modifier key and another key together (hotkey)
-    static void Hotkey(const std::string &modifier, const std::string &key) {
+    void Windows::Hotkey(const std::string &modifier, const std::string &key) {
         std::string lowerModifier = ToLower(modifier);
 
         // Translate modifier string to virtual key code
