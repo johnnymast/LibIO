@@ -28,13 +28,21 @@ namespace LibIO {
 
     inline MouseControls LIBGRAPHICS_API *GetMouseControls() {
 #if defined(PLATFORM_WINDOWS)
-        return CreateMouseControlsInstance();
+        return return LibIO::Mouse::Windows::getInstance();
 #elif defined(PLATFORM_LINUX)
         return LibIO::Mouse::Linux::getInstance();
+#else
+        return nullptr;
 #endif
     }
 
     inline KeyboardControls LIBGRAPHICS_API *GetKeyboardControls() {
-        return CreateKeyboardControlsInstance();
+#if defined(PLATFORM_WINDOWS)
+        return LibIO::Keyboard::Windows::getInstance();
+#elif defined(PLATFORM_LINUX)
+        return LibIO::Keyboard::Linux::getInstance();
+#else
+        return nullptr;
+#endif
     }
 }
