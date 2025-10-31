@@ -8,6 +8,11 @@
 
 namespace LibIO::Mouse {
 
+    Linux& Linux::getInstance() {
+        static Linux instance;
+        return instance;
+    }
+
     Display* Linux::GetDisplay() {
         Display* display = XOpenDisplay(nullptr);
         if (display == nullptr) {

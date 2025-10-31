@@ -10,6 +10,8 @@ namespace LibIO::Mouse {
     public:
 
         ~Linux() override = default;
+        static Linux &getInstance();
+
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;
         void LeftClick() override;
@@ -19,8 +21,8 @@ namespace LibIO::Mouse {
         void Scroll(int amount, int* x, int* y) override;
         void ScrollUp(int amount) override;
         void ScrollDown(int amount) override;
-
     private:
+        Linux() = default;
         static Display* GetDisplay();
     };
 }

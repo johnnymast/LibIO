@@ -10,6 +10,7 @@ namespace LibIO::Keyboard {
     class Linux final : public KeyboardControls {
     public:
         ~Linux() override = default;
+        static Linux &getInstance();
 
         void PressKey(const std::string &key) override;
         void Hotkey(const std::string &modifier, const std::string &key) override;
@@ -19,5 +20,6 @@ namespace LibIO::Keyboard {
         static std::unordered_map<std::string, uint> KeyCodes;
         static std::string ToLower(const std::string& input);
         static Display* GetDisplay();
+        Linux() = default;
     };
 }

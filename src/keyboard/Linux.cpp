@@ -83,6 +83,10 @@ namespace LibIO::Keyboard {
         {" ", XK_space}
     };
 
+    Linux& Linux::getInstance() {
+        static Linux instance;
+        return instance;
+    }
 
     Display *Linux::GetDisplay() {
         Display *display = XOpenDisplay(nullptr);

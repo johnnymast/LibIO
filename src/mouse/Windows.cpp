@@ -5,6 +5,11 @@
 
 namespace LibIO::Mouse {
 
+    Windows& Windows::getInstance() {
+        static Linux instance;
+        return instance;
+    }
+
     void Windows::MoveCursor(const int x, const int y) {
         SetCursorPos(x, y);
     }

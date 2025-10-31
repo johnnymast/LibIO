@@ -8,6 +8,8 @@ namespace LibIO::Mouse {
     public:
 
         ~Windows() override = default;
+        static Windows &getInstance();
+
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;
         void LeftClick() override;
@@ -17,6 +19,8 @@ namespace LibIO::Mouse {
         void Scroll(int amount, int* x, int* y) override;;
         void ScrollUp(int amount) override;
         void ScrollDown(int amount) override;
+    private:
+        Windows() = default;
     };
 }
 

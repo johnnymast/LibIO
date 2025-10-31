@@ -56,6 +56,11 @@ namespace LibIO::Keyboard {
         };
     }
 
+    Windows& Windows::getInstance() {
+        static Windows instance;
+        return instance;
+    }
+
     // Convert a string to lowercase
     static std::string ToLower(const std::string &input) {
         std::string result = input;
