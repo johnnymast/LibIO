@@ -1,19 +1,14 @@
 #pragma once
 
 #if defined(PLATFORM_WINDOWS)
-#   pragma message("✅ WINDOWS")
 
     #include "LibIO/mouse/Windows.hpp"
     #include "LibIO/keyboard/Windows.hpp"
 
 #elif defined(PLATFORM_LINUX)
-#   pragma message("✅ Linux")
 
     #include "LibIO/mouse/Linux.hpp"
     #include "LibIO/keyboard/Linux.hpp"
-
-#else
-#   pragma message("✅ OOPS")
 
 #endif
 
