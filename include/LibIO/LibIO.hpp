@@ -6,8 +6,8 @@
     #include "LibIO/mouse/Windows.hpp"
     #include "LibIO/keyboard/Windows.hpp"
 
-    #define MouseControleInstance() new LibIO::Mouse::Windows()->getInstance();
-    #define KeyboadControleInstance() new LibIO::Keyboard::Windows()->getInstance();
+    #define MouseControleInstance() LibIO::Mouse::Windows()::getInstance();
+    #define KeyboadControleInstance() LibIO::Keyboard::Windows()::getInstance();
 
 #elif defined(PLATFORM_LINUX)
 // #   pragma message("✅ Linux")
@@ -15,8 +15,8 @@
     #include "LibIO/mouse/Linux.hpp"
     #include "LibIO/keyboard/Linux.hpp"
 
-    #define MouseControleInstance() new LibIO::Mouse::Linux()->getInstance();
-    #define KeyboadControleInstance() new LibIO::Keyboard::Linux()->getInstance();
+    #define MouseControleInstance() LibIO::Mouse::Linux()::getInstance();
+    #define KeyboadControleInstance() LibIO::Keyboard::Linux()::getInstance();
 
 #else
     #   pragma message("✅ OOPS")
