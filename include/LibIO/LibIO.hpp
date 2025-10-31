@@ -6,23 +6,15 @@
     #include "LibIO/mouse/Windows.hpp"
     #include "LibIO/keyboard/Windows.hpp"
 
-    #define MouseControleInstance() LibIO::Mouse::Windows()::getInstance();
-    #define KeyboadControleInstance() LibIO::Keyboard::Windows()::getInstance();
-
 #elif defined(PLATFORM_LINUX)
-// #   pragma message("✅ Linux")
+#   pragma message("✅ Linux")
 
     #include "LibIO/mouse/Linux.hpp"
     #include "LibIO/keyboard/Linux.hpp"
 
-    #define MouseControleInstance() LibIO::Mouse::Linux()::getInstance();
-    #define KeyboadControleInstance() LibIO::Keyboard::Linux()::getInstance();
-
 #else
-    #   pragma message("✅ OOPS")
+#   pragma message("✅ OOPS")
 
-    #define MouseControleInstance() nullptr
-    #define KeyboadControleInstance() nullptr
 #endif
 
 #include "LibIO/mouse/MouseControls.hpp"
@@ -32,11 +24,17 @@ using LibIO::Mouse::MouseControls;
 using LibIO::Keyboard::KeyboardControls;
 
 namespace LibIO {
+
+
     inline MouseControls LIBGRAPHICS_API *GetMouseControls() {
-        return MouseControleInstance();
+#if defined(PLATFORM_WINDOWS)
+        return CreateMouseControlsInstance();
+#elif defined(PLATFORM_LINUX)
+        return LibIO::Mouse::Linux::getInstance();
+#endif
     }
 
     inline KeyboardControls LIBGRAPHICS_API *GetKeyboardControls() {
-        return KeyboadControleInstance();
+        return CreateKeyboardControlsInstance();
     }
 }

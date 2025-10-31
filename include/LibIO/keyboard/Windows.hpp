@@ -10,13 +10,11 @@ namespace LibIO::Keyboard {
     public:
 
         Windows() = default;
-
         ~Windows() override;
 
-        static void Initialize();
+        static KeyboardControls &getInstance();
 
         void PressKey(const std::string &key) override;
-
         void Hotkey(const std::string &modifier, const std::string &key) override;
     };
 }

@@ -1,12 +1,13 @@
 #include "LibIO/mouse/Windows.hpp"
+#include "LibIO/mouse/MouseControls.hpp"
 
 #if PLATFORM_WINDOWS
 #include <windows.h>
 
 namespace LibIO::Mouse {
 
-    Windows& Windows::getInstance() {
-        static Linux instance;
+    MouseControls& Windows::getInstance() {
+        static Windows instance;
         return instance;
     }
 

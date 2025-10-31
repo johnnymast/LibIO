@@ -11,7 +11,7 @@ namespace LibIO::Keyboard {
     class Linux final : public KeyboardControls {
     public:
         ~Linux() override = default;
-        static Linux &getInstance();
+        static KeyboardControls &getInstance();
 
         void PressKey(const std::string &key) override;
         void Hotkey(const std::string &modifier, const std::string &key) override;

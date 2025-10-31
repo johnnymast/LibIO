@@ -11,7 +11,7 @@ namespace LibIO::Mouse {
     public:
 
         ~Linux() override = default;
-        static Linux &getInstance();
+        static MouseControls &getInstance();
 
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;

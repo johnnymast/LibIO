@@ -83,7 +83,7 @@ namespace LibIO::Keyboard {
         {" ", XK_space}
     };
 
-    Linux& Linux::getInstance() {
+    KeyboardControls& Linux::getInstance() {
         static Linux instance;
         return instance;
     }

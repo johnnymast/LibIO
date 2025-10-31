@@ -9,7 +9,7 @@ namespace LibIO::Mouse {
     public:
 
         ~Windows() override = default;
-        static Windows &getInstance();
+        static MouseControls &getInstance();
 
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;

@@ -1,4 +1,5 @@
 #include "LibIO/mouse/Linux.hpp"
+#include "LibIO/mouse/MouseControls.hpp"
 
 #if PLATFORM_LINUX
 #include <cstdint>
@@ -8,7 +9,7 @@
 
 namespace LibIO::Mouse {
 
-    Linux& Linux::getInstance() {
+    MouseControls& Linux::getInstance() {
         static Linux instance;
         return instance;
     }

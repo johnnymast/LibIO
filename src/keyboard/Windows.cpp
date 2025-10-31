@@ -1,4 +1,5 @@
 #include "LibIO/keyboard/Windows.hpp"
+#include "LibIO/keyboard/KeyboardControls.hpp"
 
 #if PLATFORM_WINDOWS
 #include <windows.h>
@@ -55,7 +56,7 @@ namespace LibIO::Keyboard {
         { "y", 0x59 }, { "z", 0x5A }
     };
 
-    Windows& Windows::getInstance() {
+    KeyboardControls& Windows::getInstance() {
         static Windows instance;
         return instance;
     }
