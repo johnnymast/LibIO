@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(PLATFORM_WINDOWS)
+#if PLATFORM_WINDOWS
 #   pragma message("✅ WINDOWS")
 
 #include "LibIO/mouse/Windows.hpp"
@@ -8,7 +8,7 @@
 
 #define MouseControleInstance() new LibIO::Mouse::Windows()->getInstance();
 #define KeyboadControleInstance() new LibIO::Keyboard::Windows()->getInstance();
-#elif defined(PLATFORM_LINUX)
+#elif PLATFORM_LINUX
 // #   pragma message("✅ Linux")
 
 #include "LibIO/mouse/Linux.hpp"
