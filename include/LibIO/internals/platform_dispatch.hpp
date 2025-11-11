@@ -8,13 +8,16 @@
 // #include "../../../src/windows/keyboard.hpp
 #include "LibIO/mouse/Windows.hpp"
 #define MOUSE_CLASS() new LibIO::Mouse::Windows();
+
 #elif PLATFORM_LINUX
 
     #include "LibIO/mouse/Linux.hpp"
     #include "LibIO/keyboard/Linux.hpp"
+    #include "LibIO/clipboard/Linux.hpp"
 
     #define MouseControleInstance() new LibIO::Mouse::Linux();
-    #define KeyboadControleInstance() new ScreenshotWin32();
+    #define KeyboadControleInstance() new LibIO::Keyboard::Linux();
+    #define ClipboardControleInstance() new LibIO::Clipboard::Linux();
 //
 // #include "../../../src/mouse/Linux.hpp"
 // #include "../../../src/mouse/keyboard.hpp"

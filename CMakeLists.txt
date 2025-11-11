@@ -11,6 +11,11 @@ add_library(${PROJECT_NAME} SHARED
         include/LibIO/keyboard/Windows.hpp
         include/LibIO/keyboard/Linux.hpp
 
+
+        include/LibIO/clipboard/ClipboardControls.hpp
+        include/LibIO/clipboard/Windows.hpp
+        include/LibIO/clipboard/Linux.hpp
+
         include/LibIO/mouse/MouseControls.hpp
         include/LibIO/mouse/Windows.hpp
         include/LibIO/mouse/Linux.hpp
@@ -24,6 +29,10 @@ add_library(${PROJECT_NAME} SHARED
         src/mouse/Linux.cpp
 
         include/LibIO/LibIO.hpp
+        src/clipboard/Linux.cpp
+        src/clipboard/ClipboardControls.cpp
+        src/clipboard/Windows.cpp
+
 )
 
 # Platform detection
