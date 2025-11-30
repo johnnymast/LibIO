@@ -36,35 +36,10 @@ namespace LibIO::Mouse {
     }
 
     void Linux::MoveCursor(const int x, const int y) {
-        Display *display = GetDisplay();
+        Display* display = GetDisplay();
         try {
-            // #if WAYLAND
-            // Huidige cursorpositie ophalen
-            Window root = DefaultRootWindow(display);
-            Window ret_root, ret_child;
-            int root_x, root_y, win_x, win_y;
-            unsigned int mask;
-            if (XQueryPointer(display, root, &ret_root, &ret_child,
-                              &root_x, &root_y, &win_x, &win_y, &mask)) {
-                // Delta berekenen
-                int dx = x - root_x;
-                int dy = y - root_y;
-
-                // Relatieve beweging uitvoeren
-                XTestFakeRelativeMotionEvent(display, dx, dy, 0);
-                XFlush(display);
-
-                              }
-
-            // Nieuwe positie loggen
-            if (XQueryPointer(display, root, &ret_root, &ret_child,
-                              &root_x, &root_y, &win_x, &win_y, &mask)) {
-                // silence is golden
-                              }
-            // #else
-            //             XTestFakeMotionEvent(display, 0, 10, 10, 0);
-            //             XFlush(display);
-            // #endif
+            XTestFakeMotionEvent(display, 0, x, y, 0);
+            XFlush(display);
         } catch (...) {
             XCloseDisplay(display);
             throw;
