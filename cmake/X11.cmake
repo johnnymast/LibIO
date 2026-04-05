@@ -13,7 +13,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
             ${XTST_LIBRARY_DIRS}
     )
 
-    target_link_libraries(${PROJECT_NAME} PRIVATE
+    target_link_libraries(LibIO
+            PUBLIC
             X11::X11
             X11::Xrandr
             ${XTST_LIBRARIES}
