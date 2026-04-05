@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 # ---------------------------------------------------------
 # Library
 # ---------------------------------------------------------
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} STATIC
         # Public headers
         include/LibIO/LibIO.hpp
 
