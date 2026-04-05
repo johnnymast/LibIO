@@ -4,6 +4,8 @@ project(LibIO VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 20)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 # ---------------------------------------------------------
 # Library
 # ---------------------------------------------------------
@@ -36,6 +38,8 @@ add_library(${PROJECT_NAME} STATIC
         src/clipboard/ClipboardControls.cpp
         src/clipboard/Windows.cpp
 )
+
+include(X11)
 
 # ---------------------------------------------------------
 # Platform defines
