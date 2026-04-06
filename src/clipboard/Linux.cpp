@@ -5,6 +5,7 @@
 #include <chrono>
 #include <thread>
 #include <utility>
+#include <iostream>
 
 #if PLATFORM_LINUX
 namespace LibIO::Clipboard {

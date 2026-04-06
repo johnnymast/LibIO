@@ -4,17 +4,15 @@
 #if PLATFORM_WINDOWS
 #include <windows.h>
 
-#include <Windows.h>
 #include <unordered_map>
 #include <string>
 #include <thread>
 #include <stdexcept>
-#include <cctype>
 #include <algorithm>
 
 namespace LibIO::Keyboard {
 
-    const std::unordered_map<std::string, uint8_t> Windows::KeyCodes = {
+    const std::unordered_map<std::string, uint8_t> KeyCodes = {
         // Function keys
         { "f1", 0x70 }, { "f2", 0x71 }, { "f3", 0x72 }, { "f4", 0x73 },
         { "f5", 0x74 }, { "f6", 0x75 }, { "f7", 0x76 }, { "f8", 0x77 },
