@@ -6,13 +6,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-if(NOT (WINDOWS_PLATFORM OR X11_PLATFORM OR HYPRLAND_PLATFORM))
+if (NOT (WINDOWS_PLATFORM OR X11_PLATFORM OR HYPRLAND_PLATFORM))
     message(FATAL_ERROR
             "No backend selected. Enable at least one of: "
             "WINDOWS_PLATFORM, X11_PLATFORM, HYPRLAND_PLATFORM."
     )
-endif()
-
+endif ()
 
 # ---------------------------------------------------------
 # Library
@@ -20,52 +19,51 @@ endif()
 add_library(${PROJECT_NAME} STATIC
         # Public headers
         include/LibIO/LibIO.hpp
-
         include/LibIO/keyboard/KeyboardControls.hpp
-        include/LibIO/keyboard/Windows.hpp
-        include/LibIO/keyboard/Linux.hpp
-
         include/LibIO/clipboard/ClipboardControls.hpp
-        include/LibIO/clipboard/Windows.hpp
-        include/LibIO/clipboard/Linux.hpp
-
         include/LibIO/mouse/MouseControls.hpp
-        include/LibIO/mouse/Windows.hpp
-        include/LibIO/mouse/Linux.hpp
 
         # Private sources
         src/keyboard/KeyboardControls.cpp
-        src/keyboard/Windows.cpp
-        src/keyboard/Linux.cpp
-
-        src/mouse/MouseControls.cpp
-        src/mouse/Windows.cpp
-        src/mouse/Linux.cpp
-
-        src/clipboard/Linux.cpp
         src/clipboard/ClipboardControls.cpp
-        src/clipboard/Windows.cpp
+        src/mouse/MouseControls.cpp
 )
-
-
 
 if (WINDOWS_PLATFORM)
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_WINDOWS)
     target_sources(${PROJECT_NAME} PRIVATE
-            include/public/LibOS/desktop/Windows.hpp
-            src/LibOS/system/Windows.cpp
+            include/LibIO/keyboard/Windows.hpp
+            include/LibIO/clipboard/Windows.hpp
+            include/LibIO/mouse/Windows.hpp
+
+            src/keyboard/Windows.cpp
+            src/clipboard/Windows.cpp
+            src/mouse/Windows.cpp
     )
-    include(Windows OPTIONAL)
-else ()
-    target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_LINUX)
-endif()
-
-
+endif ()
 
 if (X11_PLATFORM)
     include(X11)
 endif ()
 
+if (HYPRLAND_PLATFORM)
+    message(FATAL_ERROR
+            "Hyprland input is not implemented."
+    )
+endif ()
+
+if (X11_PLATFORM OR HYPRLAND_PLATFORM)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_LINUX)
+    target_sources(${PROJECT_NAME} PRIVATE
+            include/LibIO/keyboard/Linux.hpp
+            include/LibIO/clipboard/Linux.hpp
+            include/LibIO/mouse/Linux.hpp
+
+            src/keyboard/Linux.cpp
+            src/clipboard/Linux.cpp
+            src/mouse/Linux.cpp
+    )
+endif ()
 
 
 # ---------------------------------------------------------
@@ -78,6 +76,9 @@ target_include_directories(${PROJECT_NAME}
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
+
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE LIBIO_BUILD)
 
 # ---------------------------------------------------------
 # Installation
