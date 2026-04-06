@@ -38,6 +38,7 @@ namespace LibIO::Mouse {
     void Linux::MoveCursor(const int x, const int y) {
         Display* display = GetDisplay();
         try {
+            std::cout << "Moving cursor to " << x << ", " << y << std::endl;
             XTestFakeMotionEvent(display, 0, x, y, 0);
             XFlush(display);
         } catch (...) {
