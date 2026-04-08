@@ -120,7 +120,7 @@ Ga naar de CLion build-map:
 
 Voer uit:
 
-    cmake --install . --prefix "C:/Program Files/LibIO"
+    cmake --install . --config Release --prefix "C:/Program Files/LibIO"
 
 Dit installeert:
 

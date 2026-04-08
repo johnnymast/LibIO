@@ -1,9 +1,10 @@
 #pragma once
+#include "LibIO/internals/export.hpp"
 
 #include <string>
 
 namespace LibIO::Keyboard {
-    class KeyboardControls {
+    class LIBIO_API  KeyboardControls {
     public:
         virtual ~KeyboardControls() = default;
 

@@ -4,7 +4,6 @@
 
 #if PLATFORM_WINDOWS
 #include <string>
-#include <windows.h>
 
 namespace LibIO::Clipboard {
 
@@ -16,8 +15,8 @@ namespace LibIO::Clipboard {
         std::string Paste() override;
         void Clear() override;
 
-        ~Windows() = default;
+        ~Windows() override = default;
     };
 
-} // namespace LibIO::Clipboard
+}
 #endif

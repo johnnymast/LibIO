@@ -1,7 +1,9 @@
 #include "LibIO/clipboard/Windows.hpp"
-#include <stdexcept>
 
 #if PLATFORM_WINDOWS
+#include <stdexcept>
+#include <windows.h>
+
 namespace LibIO::Clipboard {
 
     ClipboardControls &Windows::getInstance() {

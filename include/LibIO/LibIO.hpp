@@ -24,7 +24,7 @@ using LibIO::Clipboard::ClipboardControls;
 
 namespace LibIO {
 
-    inline MouseControls LIBGRAPHICS_API *GetMouseControls() {
+    inline MouseControls LIBIO_API *GetMouseControls() {
 #if defined(PLATFORM_WINDOWS)
         return &LibIO::Mouse::Windows::getInstance();
 #elif defined(PLATFORM_LINUX)
@@ -34,7 +34,7 @@ namespace LibIO {
 #endif
     }
 
-    inline KeyboardControls LIBGRAPHICS_API *GetKeyboardControls() {
+    inline KeyboardControls LIBIO_API *GetKeyboardControls() {
 #if defined(PLATFORM_WINDOWS)
         return &LibIO::Keyboard::Windows::getInstance();
 #elif defined(PLATFORM_LINUX)
@@ -44,7 +44,7 @@ namespace LibIO {
 #endif
     }
 
-    inline ClipboardControls LIBGRAPHICS_API *GetClipboardControls() {
+    inline ClipboardControls LIBIO_API *GetClipboardControls() {
 #if defined(PLATFORM_WINDOWS)
         return &LibIO::Clipboard::Windows::getInstance();
 #elif defined(PLATFORM_LINUX)

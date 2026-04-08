@@ -1,8 +1,8 @@
 #pragma once
 
-#include <string>
-
 #include "LibIO/internals/export.hpp"
+
+#include <string>
 
 namespace LibIO::Clipboard {
     class LIBIO_API ClipboardControls {

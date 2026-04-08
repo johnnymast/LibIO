@@ -4,7 +4,7 @@
 
 #if defined(PLATFORM_WINDOWS)
 namespace LibIO::Keyboard {
-    class Windows final : public KeyboardControls {
+    class LIBIO_API Windows final : public KeyboardControls {
     public:
         ~Windows() override = default;
 
