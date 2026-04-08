@@ -3,7 +3,7 @@
 #include "LibIO/internals/export.hpp"
 
 namespace LibIO::Mouse {
-    class LIBGRAPHICS_API MouseControls {
+    class LIBIO_API MouseControls {
     public:
 
         virtual ~MouseControls() = default;

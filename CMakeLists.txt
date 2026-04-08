@@ -77,7 +77,7 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE LIBIO_BUILD)
+target_compile_definitions(${PROJECT_NAME}  PRIVATE LIBIO_EXPORTS)
 
 # ---------------------------------------------------------
 # Installation

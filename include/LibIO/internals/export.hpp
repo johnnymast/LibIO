@@ -1,15 +1,12 @@
 #pragma once
 
-#if defined(_WIN32) || defined(_WIN64)
-    #ifdef LIBIO_BUILD
-        #define LIBGRAPHICS_API __declspec(dllexport)
+#ifdef _WIN32
+    #ifdef LIBIO_EXPORTS
+        #define LIBIO_API __declspec(dllexport)
     #else
-        #define LIBGRAPHICS_API __declspec(dllimport)
+        #define LIBIO_API __declspec(dllimport)
     #endif
 #else
-    #ifdef LIBIO_BUILD
-        #define LIBGRAPHICS_API __attribute__((visibility("default")))
-    #else
-        #define LIBGRAPHICS_API
-    #endif
+    #define LIBIO_API
 #endif
+

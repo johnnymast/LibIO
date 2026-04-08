@@ -5,7 +5,7 @@
 
 #if PLATFORM_WINDOWS
 namespace LibIO::Mouse {
-    class LIBGRAPHICS_API Windows final : public MouseControls {
+    class LIBIO_API Windows final : public MouseControls {
     public:
 
         ~Windows() override = default;
