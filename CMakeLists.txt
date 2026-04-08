@@ -43,7 +43,7 @@ if (WINDOWS_PLATFORM)
 endif ()
 
 if (X11_PLATFORM)
-    include(X11)
+    include(X11-LibIO)
 endif ()
 
 if (HYPRLAND_PLATFORM)
