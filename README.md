@@ -16,7 +16,7 @@ A cross-platform library to control input devices (mouse and keyboard) on Window
 - Linux: simulate input using X11/XTest extension for keyboard and mouse events.
 
 This library is designed to be used by C++17/20 projects. It is organized to integrate with the libtest solution in this repository, and it is intended to be built with CMake.
-
+   
 ## Features
 
 - Keyboard control:
