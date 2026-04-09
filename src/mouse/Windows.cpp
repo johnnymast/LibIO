@@ -5,10 +5,13 @@
 #include <windows.h>
 
 namespace LibIO::Mouse {
-
     MouseControls& Windows::getInstance() {
         static Windows instance;
         return instance;
+    }
+
+    void Windows::ClickButton(int button) {
+        LeftClick();
     }
 
     void Windows::MoveCursor(const int x, const int y) {
@@ -35,7 +38,7 @@ namespace LibIO::Mouse {
         RightClick();
     }
 
-    void Windows::Scroll(int amount, int* x = nullptr, int* y = nullptr) {
+    void Windows::Scroll(int amount, int* x, int* y) {
         if (x != nullptr && y != nullptr) {
             MoveCursor(*x, *y);
         }

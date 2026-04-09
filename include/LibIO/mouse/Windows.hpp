@@ -1,23 +1,21 @@
 #pragma once
 
-#include "LibIO/internals/export.hpp"
+#if PLATFORM_WINDOWS
 #include "MouseControls.hpp"
 
-#if PLATFORM_WINDOWS
 namespace LibIO::Mouse {
-    class LIBIO_API Windows final : public MouseControls {
+    class Windows final : public MouseControls {
     public:
 
         ~Windows() override = default;
         static MouseControls &getInstance();
-
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;
         void LeftClick() override;
         void RightClick() override;
         void MoveAndLeftClick(int x, int y) override;
         void MoveAndRightClick(int x, int y) override;
-        void Scroll(int amount, int* x, int* y) override;;
+        void Scroll(int amount, int* x, int* y) override;
         void ScrollUp(int amount) override;
         void ScrollDown(int amount) override;
     private:

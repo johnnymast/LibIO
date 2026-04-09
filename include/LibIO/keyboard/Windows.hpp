@@ -1,10 +1,11 @@
 #pragma once
 
-#include "KeyboardControls.hpp"
-
 #if defined(PLATFORM_WINDOWS)
+#include "KeyboardControls.hpp"
+#include "LibIO/export.hpp"
+
 namespace LibIO::Keyboard {
-    class LIBIO_API Windows final : public KeyboardControls {
+    class LIBIO_API Windows final : public LibIO::Keyboard::KeyboardControls {
     public:
         ~Windows() override = default;
 

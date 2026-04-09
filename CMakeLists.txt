@@ -16,25 +16,26 @@ endif ()
 # ---------------------------------------------------------
 # Library
 # ---------------------------------------------------------
-add_library(${PROJECT_NAME} STATIC
+add_library(${PROJECT_NAME} SHARED
         # Public headers
         include/LibIO/LibIO.hpp
-        include/LibIO/keyboard/KeyboardControls.hpp
+#        include/LibIO/keyboard/KeyboardControls.hpp
         include/LibIO/clipboard/ClipboardControls.hpp
-        include/LibIO/mouse/MouseControls.hpp
+#        include/LibIO/mouse/MouseControls.hpp
 
         # Private sources
-        src/keyboard/KeyboardControls.cpp
+#        src/keyboard/KeyboardControls.cpp
         src/clipboard/ClipboardControls.cpp
-        src/mouse/MouseControls.cpp
+#        src/mouse/MouseControls.cpp
+        src/LibIO.cpp
 )
 
 if (WINDOWS_PLATFORM)
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_WINDOWS)
     target_sources(${PROJECT_NAME} PRIVATE
-            include/LibIO/keyboard/Windows.hpp
+#            include/LibIO/keyboard/Windows.hpp
             include/LibIO/clipboard/Windows.hpp
-            include/LibIO/mouse/Windows.hpp
+#            include/LibIO/mouse/Windows.hpp
 
             src/keyboard/Windows.cpp
             src/clipboard/Windows.cpp
@@ -45,6 +46,10 @@ endif ()
 if (X11_PLATFORM)
     include(X11-LibIO)
 endif ()
+
+if (SPARKLE_SUPERBUILD)
+    message(STATUS "❤️  ${PROJECT_NAME} USING Superbuild")
+endif()
 
 if (HYPRLAND_PLATFORM)
     message(FATAL_ERROR

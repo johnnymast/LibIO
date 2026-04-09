@@ -1,8 +1,11 @@
 #pragma once
 
-#include "ClipboardControls.hpp"
+
 
 #if PLATFORM_WINDOWS
+#include "ClipboardControls.hpp"
+#include "LibIO/export.hpp"
+
 #include <string>
 
 namespace LibIO::Clipboard {

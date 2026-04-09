@@ -1,4 +1,6 @@
 #include "LibIO/clipboard/Linux.hpp"
+
+#if PLATFORM_LINUX
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <iostream>
@@ -7,7 +9,6 @@
 #include <utility>
 #include <iostream>
 
-#if PLATFORM_LINUX
 namespace LibIO::Clipboard {
 
     ClipboardControls &Linux::getInstance() {

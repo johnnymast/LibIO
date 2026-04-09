@@ -1,6 +1,6 @@
 #pragma once
-#include "LibIO/internals/export.hpp"
 
+#include "LibIO/export.hpp"
 #include <string>
 
 namespace LibIO::Keyboard {
@@ -8,8 +8,7 @@ namespace LibIO::Keyboard {
     public:
         virtual ~KeyboardControls() = default;
 
-        virtual void PressKey(const std::string& key);
-
-        virtual void Hotkey(const std::string &modifier, const std::string &key);
+        virtual void PressKey(const std::string& key) = 0;
+        virtual void Hotkey(const std::string &modifier, const std::string &key) = 0;
     };
 }
