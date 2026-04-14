@@ -190,9 +190,6 @@ namespace LibIO::Clipboard {
         if (eventThread.joinable()) {
             eventThread.join();
         }
-        // Optional: close display if you own lifecycle completely
-        // if (display) { XCloseDisplay(display); display = nullptr; initialized = false; }
     }
-
 }
 #endif
