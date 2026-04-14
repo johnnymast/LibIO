@@ -194,5 +194,5 @@ namespace LibIO::Clipboard {
         // if (display) { XCloseDisplay(display); display = nullptr; initialized = false; }
     }
 
-} // namespace LibIO::Clipboard
+}
 #endif

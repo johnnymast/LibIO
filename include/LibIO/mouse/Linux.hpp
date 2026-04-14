@@ -1,14 +1,13 @@
 #pragma once
 
 #include "LibIO/clipboard/Linux.hpp"
-#include "LibIO/internals/export.hpp"
 #include "MouseControls.hpp"
 
 #if PLATFORM_LINUX
 #include <X11/Xlib.h>
 
 namespace LibIO::Mouse {
-    class LIBGRAPHICS_API Linux final : public MouseControls {
+    class Linux final : public MouseControls {
     public:
 
         ~Linux() override = default;

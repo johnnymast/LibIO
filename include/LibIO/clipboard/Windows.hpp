@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #if PLATFORM_WINDOWS
 #include "ClipboardControls.hpp"
 #include "LibIO/export.hpp"
