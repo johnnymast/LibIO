@@ -1,7 +1,6 @@
 #pragma once
 
 #include "LibIO/clipboard/Linux.hpp"
-#include "LibIO/export.hpp"
 #include "MouseControls.hpp"
 
 #if PLATFORM_LINUX

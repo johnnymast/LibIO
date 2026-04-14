@@ -20,29 +20,25 @@ namespace LibIO::Clipboard {
         std::string Paste() override;
         void Clear() override;
 
-        ~Linux();
+        ~Linux() override;
 
     private:
         void clipboardEventLoop();
         void initX11();
 
-        // Event-loop control
         std::thread eventThread;
         std::atomic<bool> running{false};
 
-        // X11 state (instance members, no static inline)
         Display *display = nullptr;
         Window window = 0;
         Atom clipboardAtom = 0, targetsAtom = 0, utf8Atom = 0, stringAtom = 0, textAtom = 0;
 
-        // Init guard
         std::once_flag initOnce;
         bool initialized = false;
 
-        // Clipboard data (instance-scoped)
         std::mutex clipboardMutex;
         std::string clipboardContent;
     };
 
-} // namespace LibIO::Clipboard
+}
 #endif
