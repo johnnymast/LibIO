@@ -10,7 +10,6 @@
 #include <iostream>
 
 namespace LibIO::Clipboard {
-
     ClipboardControls &Linux::getInstance() {
         static Linux instance;
         return instance;
@@ -33,10 +32,10 @@ namespace LibIO::Clipboard {
                                          0, 0, 1, 1, 0, 0, 0);
 
             clipboardAtom = XInternAtom(display, "CLIPBOARD", False);
-            targetsAtom   = XInternAtom(display, "TARGETS", False);
-            utf8Atom      = XInternAtom(display, "UTF8_STRING", False);
-            stringAtom    = XInternAtom(display, "STRING", False);
-            textAtom      = XInternAtom(display, "TEXT", False);
+            targetsAtom = XInternAtom(display, "TARGETS", False);
+            utf8Atom = XInternAtom(display, "UTF8_STRING", False);
+            stringAtom = XInternAtom(display, "STRING", False);
+            textAtom = XInternAtom(display, "TEXT", False);
 
             initialized = true;
         });
@@ -62,41 +61,42 @@ namespace LibIO::Clipboard {
     }
 
     void Linux::clipboardEventLoop() {
+        if (!display) return;
+
+        auto predicate = [](Display *dpy, XEvent *ev, XPointer arg) -> Bool {
+            return ev->type == SelectionRequest || ev->type == SelectionClear;
+        };
+
         while (running) {
-            if (!display) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(10));
-                continue;
-            }
+            XEvent event;
 
-            while (XPending(display)) {
-                XEvent event;
-                XNextEvent(display, &event);
-
+            // Haal alleen SelectionRequest / SelectionClear uit de queue
+            if (XCheckIfEvent(display, &event, predicate, nullptr)) {
                 if (event.type == SelectionRequest) {
                     XSelectionRequestEvent *req = &event.xselectionrequest;
                     XEvent respond{};
-                    respond.xselection.type      = SelectionNotify;
-                    respond.xselection.display   = req->display;
+                    respond.xselection.type = SelectionNotify;
+                    respond.xselection.display = req->display;
                     respond.xselection.requestor = req->requestor;
                     respond.xselection.selection = req->selection;
-                    respond.xselection.target    = req->target;
-                    respond.xselection.time      = req->time;
-                    respond.xselection.property  = None;
+                    respond.xselection.target = req->target;
+                    respond.xselection.time = req->time;
+                    respond.xselection.property = None;
 
                     if (req->property == None) {
                         req->property = req->target;
                     }
 
                     if (req->target == targetsAtom) {
-                        Atom typeList[] = { utf8Atom, stringAtom, textAtom };
+                        Atom typeList[] = {utf8Atom, stringAtom, textAtom};
                         XChangeProperty(display, req->requestor, req->property,
                                         XA_ATOM, 32, PropModeReplace,
                                         reinterpret_cast<unsigned char *>(typeList), 3);
                         respond.xselection.property = req->property;
                     } else if (req->target == utf8Atom || req->target == stringAtom || req->target == textAtom) {
                         std::lock_guard<std::mutex> lock(clipboardMutex);
-                        const unsigned char* bytes =
-                            reinterpret_cast<const unsigned char *>(clipboardContent.c_str());
+                        const unsigned char *bytes =
+                                reinterpret_cast<const unsigned char *>(clipboardContent.c_str());
                         int len = static_cast<int>(clipboardContent.size());
 
                         XChangeProperty(display, req->requestor, req->property,
@@ -108,13 +108,15 @@ namespace LibIO::Clipboard {
                     XSendEvent(display, req->requestor, False, 0, &respond);
                     XFlush(display);
                 } else if (event.type == SelectionClear) {
-                    // Another owner took the selection; you can decide behavior here if needed
+                    // eventueel: reageren op verlies van ownership
                 }
+            } else {
+                // Geen relevante events: even pauze
+                std::this_thread::sleep_for(std::chrono::milliseconds(5));
             }
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
     }
+
 
     std::string Linux::Paste() {
         initX11();
