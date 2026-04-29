@@ -84,7 +84,7 @@ namespace LibIO::Keyboard::Backends {
         {" ", XK_space}
     };
 
-    KeyboardControls& X11::getInstance() {
+    KeyboardControls &X11::getInstance() {
         static X11 instance;
         return instance;
     }

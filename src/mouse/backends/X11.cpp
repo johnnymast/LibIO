@@ -9,14 +9,13 @@
 #include <iostream>
 
 namespace LibIO::Mouse::Backends {
-
-    MouseControls& X11::getInstance() {
+    MouseControls &X11::getInstance() {
         static X11 instance;
         return instance;
     }
 
-    Display* X11::GetDisplay() {
-        Display* display = XOpenDisplay(nullptr);
+    Display *X11::GetDisplay() {
+        Display *display = XOpenDisplay(nullptr);
         if (display == nullptr) {
             throw std::runtime_error("Could not open X11 display");
         }
@@ -24,7 +23,7 @@ namespace LibIO::Mouse::Backends {
     }
 
     void X11::ClickButton(const int button) {
-        Display* display = GetDisplay();
+        Display *display = GetDisplay();
         try {
             XTestFakeButtonEvent(display, button, True, 0); // Press
             XTestFakeButtonEvent(display, button, False, 0); // Release
@@ -37,7 +36,7 @@ namespace LibIO::Mouse::Backends {
     }
 
     void X11::MoveCursor(const int x, const int y) {
-        Display* display = GetDisplay();
+        Display *display = GetDisplay();
         try {
             XTestFakeMotionEvent(display, 0, x, y, 0);
             XFlush(display);
@@ -57,7 +56,7 @@ namespace LibIO::Mouse::Backends {
     }
 
     void X11::MoveAndLeftClick(const int x, const int y) {
-        Display* display = GetDisplay();
+        Display *display = GetDisplay();
         try {
             MoveCursor(x, y);
             XTestFakeButtonEvent(display, Button1, True, 0);
@@ -71,7 +70,7 @@ namespace LibIO::Mouse::Backends {
     }
 
     void X11::MoveAndRightClick(const int x, const int y) {
-        Display* display = GetDisplay();
+        Display *display = GetDisplay();
         try {
             MoveCursor(x, y);
             XTestFakeButtonEvent(display, Button3, True, 0);
@@ -84,10 +83,9 @@ namespace LibIO::Mouse::Backends {
         XCloseDisplay(display);
     }
 
-    void X11::Scroll(const int amount, int* x, int* y) {
-        Display* display = GetDisplay();
+    void X11::Scroll(const int amount, int *x, int *y) {
+        Display *display = GetDisplay();
         try {
-
             if (x != nullptr && y != nullptr) {
                 XTestFakeMotionEvent(display, 0, *x, *y, 0);
             }

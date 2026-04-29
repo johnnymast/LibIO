@@ -10,22 +10,21 @@
 #include <mutex>
 
 namespace LibIO::Clipboard::Backends {
-
     class X11 : public ClipboardControls {
     public:
-
         ~X11() override;
 
         static ClipboardControls &getInstance();
 
         void Copy(std::string text) override;
+
         std::string Paste() override;
+
         void Clear() override;
-
-
 
     private:
         void clipboardEventLoop();
+
         void initX11();
 
         std::thread eventThread;

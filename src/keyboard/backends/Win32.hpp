@@ -16,6 +16,7 @@ namespace LibIO::Keyboard::Backends {
         std::string ToLower(const std::string &input);
 
         void PressKey(const std::string &key) override;
+
         void Hotkey(const std::string &modifier, const std::string &key) override;
     };
 }

@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
-project(LibIO VERSION 1.0.0 LANGUAGES CXX)
+project(LibIO VERSION 1.0.0 LANGUAGES  C CXX)
 
+set(PROTOCOL_DIR "${CMAKE_SOURCE_DIR}/protocols")
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 20)
-
+set(WLROOTS_PLATFORM ON)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-
 
 if (NOT (WINDOWS_PLATFORM OR X11_PLATFORM OR WLROOTS_PLATFORM))
     message(FATAL_ERROR
@@ -41,23 +40,17 @@ if (X11_PLATFORM)
             src/keyboard/backends/X11.cpp
             src/mouse/backends/X11.cpp
     )
-
     include(X11-LibIO)
 endif ()
 
-
 if (WLROOTS_PLATFORM)
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_WLROOTS)
-
     target_sources(${PROJECT_NAME} PRIVATE
             src/keyboard/backends/WLRoots.cpp
             src/clipboard/backends/WLRoots.cpp
             src/mouse/backends/WLRoots.cpp
     )
-#
-#    message(FATAL_ERROR
-#            "Hyprland input is not implemented."
-#    )
+    include(WLRoots-LibIO)
 endif ()
 
 

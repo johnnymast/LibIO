@@ -5,7 +5,6 @@
 #include <windows.h>
 
 namespace LibIO::Clipboard::Backends {
-
     ClipboardControls &Win32::getInstance() {
         static Win32 instance;
         return instance;
@@ -22,7 +21,7 @@ namespace LibIO::Clipboard::Backends {
             return;
         }
 
-        char* buffer = static_cast<char*>(GlobalLock(hMem));
+        char *buffer = static_cast<char *>(GlobalLock(hMem));
         if (buffer) {
             memcpy(buffer, text.c_str(), text.size() + 1);
         }
@@ -41,7 +40,7 @@ namespace LibIO::Clipboard::Backends {
             return "";
         }
 
-        char* buffer = static_cast<char*>(GlobalLock(hData));
+        char *buffer = static_cast<char *>(GlobalLock(hData));
         std::string result;
         if (buffer) {
             result = buffer;
@@ -58,6 +57,5 @@ namespace LibIO::Clipboard::Backends {
             CloseClipboard();
         }
     }
-
 } // namespace LibIO::Clipboard
 #endif

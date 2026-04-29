@@ -4,7 +4,7 @@
 #include <windows.h>
 
 namespace LibIO::Mouse::Backends {
-    MouseControls& Win32::getInstance() {
+    MouseControls &Win32::getInstance() {
         static Win32 instance;
         return instance;
     }
@@ -37,7 +37,7 @@ namespace LibIO::Mouse::Backends {
         RightClick();
     }
 
-    void Win32::Scroll(int amount, int* x, int* y) {
+    void Win32::Scroll(int amount, int *x, int *y) {
         if (x != nullptr && y != nullptr) {
             MoveCursor(*x, *y);
         }
@@ -50,7 +50,7 @@ namespace LibIO::Mouse::Backends {
     }
 
     void Win32::ScrollDown(int amount) {
-        Scroll(-amount,nullptr, nullptr);
+        Scroll(-amount, nullptr, nullptr);
     }
 }
 #endif
