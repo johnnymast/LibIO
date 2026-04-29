@@ -36,13 +36,8 @@ endif ()
 if (X11_PLATFORM)
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_X11)
     target_sources(${PROJECT_NAME} PRIVATE
-            src/keyboard/backends/X11.hpp
-            src/keyboard/backends/X11.cpp
-
-            src/clipboard/backends/X11.hpp
             src/clipboard/backends/X11.cpp
-
-            src/mouse/backends/X11.hpp
+            src/keyboard/backends/X11.cpp
             src/mouse/backends/X11.cpp
     )
     include(X11-LibIO)
@@ -63,11 +58,24 @@ if (SPARKLE_SUPERBUILD)
     message(STATUS "❤️  ${PROJECT_NAME} USING Superbuild")
 endif()
 
-if (X11_PLATFORM OR WLROOTS_PLATFORM)
+if (X11_PLATFORM OR HYPRLAND_PLATFORM)
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_LINUX)
+    target_sources(${PROJECT_NAME} PRIVATE
+            src/keyboard/backends/X11.hpp
+            src/keyboard/backends/X11.cpp
+
+            src/clipboard/backends/X11.hpp
+            src/clipboard/backends/X11.cpp
+
+            src/mouse/backends/X11.hpp
+            src/mouse/backends/X11.cpp
+    )
 endif ()
 
 
+# ---------------------------------------------------------
+# Include directories
+# ---------------------------------------------------------
 target_include_directories(${PROJECT_NAME}
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/public>
