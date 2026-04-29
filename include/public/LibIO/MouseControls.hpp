@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LibIO/export.hpp"
+#include "export.hpp"
 
 namespace LibIO::Mouse {
     class LIBIO_API MouseControls {

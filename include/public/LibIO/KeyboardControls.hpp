@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LibIO/export.hpp"
+#include "export.hpp"
 #include <string>
 
 namespace LibIO::Keyboard {

@@ -1,5 +1,7 @@
 #pragma once
+
 #include "LibIO/KeyboardControls.hpp"
+#include "../../../include/public/LibIO/export.hpp"
 
 #if PLATFORM_WINDOWS
 #include "LibIO/export.hpp"

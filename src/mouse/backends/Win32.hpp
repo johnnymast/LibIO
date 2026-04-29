@@ -1,10 +1,11 @@
 #pragma once
 
 #include "LibIO/MouseControls.hpp"
+#include "../../../include/public/LibIO/export.hpp"
 
 #if PLATFORM_WINDOWS
 namespace LibIO::Mouse::Backends {
-    class Win32 final : public MouseControls {
+    class LIBIO_API Win32 final : public MouseControls {
     public:
 
         ~Win32() override = default;

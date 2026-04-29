@@ -6,9 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-#set(WLROOTS_PLATFORM ON)
-set(X11_PLATFORM ON)
-#set(WINDOWS_PLATFORM ON)
+
 
 if (NOT (WINDOWS_PLATFORM OR X11_PLATFORM OR WLROOTS_PLATFORM))
     message(FATAL_ERROR
@@ -70,8 +68,13 @@ endif()
 if (X11_PLATFORM OR HYPRLAND_PLATFORM)
     target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM_LINUX)
     target_sources(${PROJECT_NAME} PRIVATE
+            src/keyboard/backends/X11.hpp
             src/keyboard/backends/X11.cpp
+
+            src/clipboard/backends/X11.hpp
             src/clipboard/backends/X11.cpp
+
+            src/mouse/backends/X11.hpp
             src/mouse/backends/X11.cpp
     )
 endif ()
