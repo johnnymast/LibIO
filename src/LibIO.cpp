@@ -1,16 +1,14 @@
 #include "LibIO/LibIO.hpp"
 
-// using LibIO::Mouse::MouseControls;
-// using LibIO::Keyboard::KeyboardControls;
-using LibIO::Clipboard::ClipboardControls;
-
 namespace LibIO {
 
     MouseControls *GetMouseControls() {
 #if defined(PLATFORM_WINDOWS)
-        return &LibIO::Mouse::Windows::getInstance();
-#elif defined(PLATFORM_LINUX)
-        return &LibIO::Mouse::Linux::getInstance();
+        return &Mouse::Backends::Win32::getInstance();
+#elif defined(PLATFORM_X11)
+        return &Mouse::Backends::X11::getInstance();
+#elif defined(PLATFORM_WLROOTS)
+        return &Mouse::Backends::WLRoots::getInstance();
 #else
         return nullptr;
 #endif
@@ -18,9 +16,11 @@ namespace LibIO {
 
     KeyboardControls *GetKeyboardControls() {
 #if defined(PLATFORM_WINDOWS)
-        return &LibIO::Keyboard::Windows::getInstance();
-#elif defined(PLATFORM_LINUX)
-        return &LibIO::Keyboard::Linux::getInstance();
+        return &Keyboard::Backends::Win32::getInstance();
+#elif defined(PLATFORM_X11)
+        return &Keyboard::Backends::X11::getInstance();
+#elif defined(PLATFORM_WLROOTS)
+        return &Keyboard::Backends::WLRoots::getInstance();
 #else
         return nullptr;
 #endif
@@ -28,9 +28,11 @@ namespace LibIO {
 
     ClipboardControls *GetClipboardControls() {
 #if defined(PLATFORM_WINDOWS)
-        return &LibIO::Clipboard::Windows::getInstance();
-#elif defined(PLATFORM_LINUX)
-        return &LibIO::Clipboard::Linux::getInstance();
+        return &Clipboard::Backends::Win32::getInstance();
+#elif defined(PLATFORM_X11)
+        return &Clipboard::Backends::X11::getInstance();
+#elif defined(PLATFORM_WLROOTS)
+        return &Clipboard::Backends::WLRoots::getInstance();
 #else
         return nullptr;
 #endif

@@ -1,18 +1,16 @@
 #pragma once
 
-#include "LibIO/clipboard/Linux.hpp"
-#include "MouseControls.hpp"
+#include "LibIO/MouseControls.hpp"
 
-#if PLATFORM_LINUX
-#include <X11/Xlib.h>
-
-namespace LibIO::Mouse {
-    class Linux final : public MouseControls {
+#if PLATFORM_WINDOWS
+namespace LibIO::Mouse::Backends {
+    class Win32 final : public MouseControls {
     public:
 
-        ~Linux() override = default;
-        static MouseControls &getInstance();
+        ~Win32() override = default;
+        Win32() = default;
 
+        static MouseControls &getInstance();
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;
         void LeftClick() override;
@@ -22,9 +20,6 @@ namespace LibIO::Mouse {
         void Scroll(int amount, int* x, int* y) override;
         void ScrollUp(int amount) override;
         void ScrollDown(int amount) override;
-    private:
-        Linux() = default;
-        static Display* GetDisplay();
     };
 }
 #endif

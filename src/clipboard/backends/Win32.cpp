@@ -1,4 +1,4 @@
-#include "LibIO/clipboard/Windows.hpp"
+#include "Win32.hpp"
 
 #if PLATFORM_WINDOWS
 #include <stdexcept>
@@ -6,12 +6,12 @@
 
 namespace LibIO::Clipboard {
 
-    ClipboardControls &Windows::getInstance() {
+    ClipboardControls &Win32::getInstance() {
         static Windows instance;
         return instance;
     }
 
-    void Windows::Copy(std::string text) {
+    void Win32::Copy(std::string text) {
         if (!OpenClipboard(nullptr)) return;
         EmptyClipboard();
 
@@ -32,7 +32,7 @@ namespace LibIO::Clipboard {
         CloseClipboard();
     }
 
-    std::string Windows::Paste() {
+    std::string Win32::Paste() {
         if (!OpenClipboard(nullptr)) return "";
 
         HANDLE hData = GetClipboardData(CF_TEXT);
@@ -52,7 +52,7 @@ namespace LibIO::Clipboard {
         return result;
     }
 
-    void Windows::Clear() {
+    void Win32::Clear() {
         if (OpenClipboard(nullptr)) {
             EmptyClipboard();
             CloseClipboard();

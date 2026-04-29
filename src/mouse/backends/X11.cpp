@@ -1,21 +1,21 @@
-#include "LibIO/mouse/Linux.hpp"
-#include "LibIO/mouse/MouseControls.hpp"
+#include "X11.hpp"
 
-#if PLATFORM_LINUX
+
+#if PLATFORM_X11
 #include <cstdint>
 #include <stdexcept>
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 #include <iostream>
 
-namespace LibIO::Mouse {
+namespace LibIO::Mouse::Backends {
 
-    MouseControls& Linux::getInstance() {
-        static Linux instance;
+    MouseControls& X11::getInstance() {
+        static X11 instance;
         return instance;
     }
 
-    Display* Linux::GetDisplay() {
+    Display* X11::GetDisplay() {
         Display* display = XOpenDisplay(nullptr);
         if (display == nullptr) {
             throw std::runtime_error("Could not open X11 display");
@@ -23,7 +23,7 @@ namespace LibIO::Mouse {
         return display;
     }
 
-    void Linux::ClickButton(const int button) {
+    void X11::ClickButton(const int button) {
         Display* display = GetDisplay();
         try {
             XTestFakeButtonEvent(display, button, True, 0); // Press
@@ -36,7 +36,7 @@ namespace LibIO::Mouse {
         XCloseDisplay(display);
     }
 
-    void Linux::MoveCursor(const int x, const int y) {
+    void X11::MoveCursor(const int x, const int y) {
         Display* display = GetDisplay();
         try {
             XTestFakeMotionEvent(display, 0, x, y, 0);
@@ -48,15 +48,15 @@ namespace LibIO::Mouse {
         XCloseDisplay(display);
     }
 
-    void Linux::LeftClick() {
+    void X11::LeftClick() {
         ClickButton(Button1);
     }
 
-    void Linux::RightClick() {
+    void X11::RightClick() {
         ClickButton(Button3);
     }
 
-    void Linux::MoveAndLeftClick(const int x, const int y) {
+    void X11::MoveAndLeftClick(const int x, const int y) {
         Display* display = GetDisplay();
         try {
             MoveCursor(x, y);
@@ -70,7 +70,7 @@ namespace LibIO::Mouse {
         XCloseDisplay(display);
     }
 
-    void Linux::MoveAndRightClick(const int x, const int y) {
+    void X11::MoveAndRightClick(const int x, const int y) {
         Display* display = GetDisplay();
         try {
             MoveCursor(x, y);
@@ -84,7 +84,7 @@ namespace LibIO::Mouse {
         XCloseDisplay(display);
     }
 
-    void Linux::Scroll(const int amount, int* x, int* y) {
+    void X11::Scroll(const int amount, int* x, int* y) {
         Display* display = GetDisplay();
         try {
 
@@ -108,11 +108,11 @@ namespace LibIO::Mouse {
         XCloseDisplay(display);
     }
 
-    void Linux::ScrollUp(const int amount) {
+    void X11::ScrollUp(const int amount) {
         Scroll(amount, nullptr, nullptr);
     }
 
-    void Linux::ScrollDown(const int amount) {
+    void X11::ScrollDown(const int amount) {
         Scroll(-amount, nullptr, nullptr);
     }
 }

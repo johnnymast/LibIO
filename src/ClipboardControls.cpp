@@ -1,4 +1,4 @@
-#include "LibIO/clipboard/ClipboardControls.hpp"
+#include "../include/public/LibIO/ClipboardControls.hpp"
 
 namespace LibIO::Clipboard {
 

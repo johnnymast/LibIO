@@ -1,21 +1,22 @@
-#include "LibIO/keyboard/Linux.hpp"
+#include "X11.hpp"
 
-#if PLATFORM_LINUX
+#if PLATFORM_X11
 
-#include <algorithm>
-#include <stdexcept>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/extensions/XTest.h>
+
+#include <algorithm>
+#include <stdexcept>
 #include <unordered_map>
 #include <string>
 #include <thread>
 #include <utility>
 #include <vector>
 
-namespace LibIO::Keyboard {
+namespace LibIO::Keyboard::Backends {
     // Other member declarations...
-    std::unordered_map<char, std::pair<std::string, std::string> > Linux::SpecialCharacterMap = {
+    std::unordered_map<char, std::pair<std::string, std::string> > X11::SpecialCharacterMap = {
         {'@', {"shift", "2"}},
         {'#', {"shift", "3"}},
         {'$', {"shift", "4"}},
@@ -39,7 +40,7 @@ namespace LibIO::Keyboard {
         {'~', {"shift", "`"}}
     };
 
-    std::unordered_map<std::string, uint> Linux::KeyCodes = {
+    std::unordered_map<std::string, uint> X11::KeyCodes = {
         // Function keys
         {"f1", XK_F1}, {"f2", XK_F2}, {"f3", XK_F3}, {"f4", XK_F4},
         {"f5", XK_F5}, {"f6", XK_F6}, {"f7", XK_F7}, {"f8", XK_F8},
@@ -83,12 +84,12 @@ namespace LibIO::Keyboard {
         {" ", XK_space}
     };
 
-    KeyboardControls& Linux::getInstance() {
-        static Linux instance;
+    KeyboardControls& X11::getInstance() {
+        static X11 instance;
         return instance;
     }
 
-    Display *Linux::GetDisplay() {
+    Display *X11::GetDisplay() {
         Display *display = XOpenDisplay(nullptr);
         if (!display) {
             throw std::runtime_error("Could not open X11 display");
@@ -96,14 +97,14 @@ namespace LibIO::Keyboard {
         return display;
     }
 
-    std::string Linux::ToLower(const std::string &input) {
+    std::string X11::ToLower(const std::string &input) {
         std::string result = input;
         std::transform(result.begin(), result.end(), result.begin(),
                        [](unsigned char c) { return std::tolower(c); });
         return result;
     }
 
-    void Linux::PressKey(const std::string &key) {
+    void X11::PressKey(const std::string &key) {
         if (key.empty()) return;
 
         if (key == "\n") {
@@ -159,7 +160,7 @@ namespace LibIO::Keyboard {
         }
     }
 
-    void Linux::Hotkey(const std::string &modifier, const std::string &key) {
+    void X11::Hotkey(const std::string &modifier, const std::string &key) {
         Display *display = GetDisplay();
         try {
             std::vector<std::string> modifiers;

@@ -1,17 +1,12 @@
-#include "LibIO/keyboard/Windows.hpp"
-#include "LibIO/keyboard/KeyboardControls.hpp"
+#include "Win32.hpp"
+
 
 #if PLATFORM_WINDOWS
-#include <windows.h>
 
+#include <cstdint>
 #include <unordered_map>
-#include <string>
-#include <thread>
-#include <stdexcept>
-#include <algorithm>
 
-namespace LibIO::Keyboard {
-
+namespace LibIO::Keyboard::Backends {
     const std::unordered_map<std::string, uint8_t> KeyCodes = {
         // Function keys
         { "f1", 0x70 }, { "f2", 0x71 }, { "f3", 0x72 }, { "f4", 0x73 },
@@ -54,13 +49,13 @@ namespace LibIO::Keyboard {
         { "y", 0x59 }, { "z", 0x5A }
     };
 
-    KeyboardControls& Windows::getInstance() {
-        static Windows instance;
+    KeyboardControls& Win32::getInstance() {
+        static Win32 instance;
         return instance;
     }
 
     // Convert a string to lowercase
-    std::string Windows::ToLower(const std::string &input) {
+    std::string Win32::ToLower(const std::string &input) {
         std::string result = input;
         std::transform(result.begin(), result.end(), result.begin(),
                        [](unsigned char c) { return std::tolower(c); });
@@ -68,7 +63,7 @@ namespace LibIO::Keyboard {
     }
 
     // Press a key by name
-    void Windows::PressKey(const std::string &key) {
+    void Win32::PressKey(const std::string &key) {
         std::string lowerKey = ToLower(key);
 
         BYTE virtualKey = 0;
@@ -108,7 +103,7 @@ namespace LibIO::Keyboard {
     }
 
     // Press a modifier key and another key together (hotkey)
-    void Windows::Hotkey(const std::string &modifier, const std::string &key) {
+    void Win32::Hotkey(const std::string &modifier, const std::string &key) {
         std::string lowerModifier = ToLower(modifier);
 
         // Translate modifier string to virtual key code

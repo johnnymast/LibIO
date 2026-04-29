@@ -1,23 +1,21 @@
-#include "LibIO/clipboard/Linux.hpp"
+#include "X11.hpp"
 
-#if PLATFORM_LINUX
+#if PLATFORM_X11
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include <utility>
-#include <iostream>
 
-namespace LibIO::Clipboard {
-    ClipboardControls &Linux::getInstance() {
-        static Linux instance;
+namespace LibIO::Clipboard::Backends {
+    ClipboardControls &X11::getInstance() {
+        static X11 instance;
         return instance;
     }
 
-    void Linux::initX11() {
+    void X11::initX11() {
         std::call_once(initOnce, [&]() {
-            // Prepare Xlib for multi-thread usage
             if (!XInitThreads()) {
                 std::cerr << "Warning: XInitThreads() failed; Xlib may not be thread-safe.\n";
             }
@@ -41,7 +39,7 @@ namespace LibIO::Clipboard {
         });
     }
 
-    void Linux::Copy(std::string text) {
+    void X11::Copy(std::string text) {
         initX11();
         if (!initialized || !display || window == 0) return;
 
@@ -56,11 +54,11 @@ namespace LibIO::Clipboard {
 
         bool expected = false;
         if (running.compare_exchange_strong(expected, true)) {
-            eventThread = std::thread(&Linux::clipboardEventLoop, this);
+            eventThread = std::thread(&X11::clipboardEventLoop, this);
         }
     }
 
-    void Linux::clipboardEventLoop() {
+    void X11::clipboardEventLoop() {
         if (!display) return;
 
         auto predicate = [](Display *dpy, XEvent *ev, XPointer arg) -> Bool {
@@ -118,7 +116,7 @@ namespace LibIO::Clipboard {
     }
 
 
-    std::string Linux::Paste() {
+    std::string X11::Paste() {
         initX11();
         if (!initialized || !display || window == 0) return "";
 
@@ -175,7 +173,7 @@ namespace LibIO::Clipboard {
         return result;
     }
 
-    void Linux::Clear() {
+    void X11::Clear() {
         initX11();
         if (!initialized || !display) return;
 
@@ -187,7 +185,7 @@ namespace LibIO::Clipboard {
         XFlush(display);
     }
 
-    Linux::~Linux() {
+    X11::~X11() {
         running = false;
         if (eventThread.joinable()) {
             eventThread.join();

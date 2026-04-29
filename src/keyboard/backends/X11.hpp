@@ -1,16 +1,16 @@
 #pragma once
 
+#include "LibIO/KeyboardControls.hpp"
+
+#if PLATFORM_X11
 #include <unordered_map>
-
-#include "KeyboardControls.hpp"
-
-#if defined(PLATFORM_LINUX)
 #include <X11/Xlib.h>
 
-namespace LibIO::Keyboard {
-    class Linux final : public KeyboardControls {
+namespace LibIO::Keyboard::Backends {
+    class X11: public KeyboardControls {
     public:
-        ~Linux() override = default;
+        X11() = default;
+        ~X11() override = default;
         static KeyboardControls &getInstance();
 
         void PressKey(const std::string &key) override;
@@ -21,7 +21,6 @@ namespace LibIO::Keyboard {
         static std::unordered_map<std::string, uint> KeyCodes;
         static std::string ToLower(const std::string& input);
         static Display* GetDisplay();
-        Linux() = default;
     };
 }
 #endif

@@ -1,4 +1,4 @@
-#include "LibIO/mouse/MouseControls.hpp"
+#include "LibIO/MouseControls.hpp"
 
 namespace LibIO::Mouse {
     void MouseControls::ClickButton(int button) {

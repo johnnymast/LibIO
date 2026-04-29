@@ -1,14 +1,18 @@
 #pragma once
 
-#if PLATFORM_WINDOWS
-#include "MouseControls.hpp"
+#include "LibIO/MouseControls.hpp"
 
-namespace LibIO::Mouse {
-    class Windows final : public MouseControls {
+#if PLATFORM_X11
+#include <X11/Xlib.h>
+
+namespace LibIO::Mouse::Backends {
+    class X11 final : public MouseControls {
     public:
+        X11() = default;
+        ~X11() override = default;
 
-        ~Windows() override = default;
         static MouseControls &getInstance();
+
         void ClickButton(int button) override;
         void MoveCursor(int x, int y) override;
         void LeftClick() override;
@@ -19,7 +23,8 @@ namespace LibIO::Mouse {
         void ScrollUp(int amount) override;
         void ScrollDown(int amount) override;
     private:
-        Windows() = default;
+
+        static Display* GetDisplay();
     };
 }
-#endif
+#endif //LIBIO_X11_HPP

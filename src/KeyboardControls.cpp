@@ -1,4 +1,4 @@
-#include "LibIO/keyboard/KeyboardControls.hpp"
+#include "LibIO/KeyboardControls.hpp"
 
 namespace LibIO::Keyboard {
     void KeyboardControls::PressKey(const std::string &key) {
