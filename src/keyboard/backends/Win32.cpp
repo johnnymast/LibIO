@@ -2,9 +2,13 @@
 
 
 #if PLATFORM_WINDOWS
+#include <windows.h>
 
-#include <cstdint>
 #include <unordered_map>
+#include <string>
+#include <thread>
+#include <stdexcept>
+#include <algorithm>
 
 namespace LibIO::Keyboard::Backends {
     const std::unordered_map<std::string, uint8_t> KeyCodes = {

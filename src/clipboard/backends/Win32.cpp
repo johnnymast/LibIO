@@ -4,10 +4,10 @@
 #include <stdexcept>
 #include <windows.h>
 
-namespace LibIO::Clipboard {
+namespace LibIO::Clipboard::Backends {
 
     ClipboardControls &Win32::getInstance() {
-        static Windows instance;
+        static Win32 instance;
         return instance;
     }
 

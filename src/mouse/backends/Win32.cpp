@@ -5,7 +5,7 @@
 
 namespace LibIO::Mouse::Backends {
     MouseControls& Win32::getInstance() {
-        static Windows instance;
+        static Win32 instance;
         return instance;
     }
 
