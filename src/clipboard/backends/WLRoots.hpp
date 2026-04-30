@@ -2,7 +2,7 @@
 
 #include "LibIO/ClipboardControls.hpp"
 
-#if PLATFORM_WLROOTS
+#if WLROOTS_CLIPBOARD
 #include <wayland-client.h>
 #include "data-control-unstable-v1-protocol.h"
 #include <string>

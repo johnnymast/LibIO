@@ -1,6 +1,6 @@
 #include "WLRoots.hpp"
 
-#if PLATFORM_WLROOTS
+#if WLROOTS_CLIPBOARD
 #include <cstring>
 #include <unistd.h>
 

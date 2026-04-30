@@ -2,21 +2,31 @@
 
 
 #if defined(PLATFORM_WINDOWS)
-    #include "clipboard/backends/Win32.hpp"
+
     #include "keyboard/backends/Win32.hpp"
     #include "mouse/backends/Win32.hpp"
 #elif defined(PLATFORM_X11)
-    #include "clipboard/backends/X11.hpp"
     #include "keyboard/backends/X11.hpp"
     #include "mouse/backends/X11.hpp"
 #endif
 
+
 #if defined(PLATFORM_WLROOTS)
     #include "mouse/backends/WLRoots.hpp"
     #include "keyboard/backends/WLRoots.hpp"
-    #include "clipboard/backends/WLRoots.hpp"
 #endif
 
+#if defined(WINDOWS_CLIPBOARD)
+    #include "clipboard/backends/Win32.hpp"
+#endif
+
+#if defined(X11_CLIPBOARD)
+    #include "clipboard/backends/X11.hpp"
+#endif
+
+#if defined(WLROOTS_CLIPBOARD)
+    #include "clipboard/backends/WLRoots.hpp"
+#endif
 namespace LibIO {
 
     MouseControls *GetMouseControls() {
@@ -44,11 +54,11 @@ namespace LibIO {
     }
 
     ClipboardControls *GetClipboardControls() {
-#if defined(PLATFORM_WINDOWS)
+#if defined(WINDOWS_CLIPBOARD)
         return &Clipboard::Backends::Win32::getInstance();
-#elif defined(PLATFORM_X11)
+#elif defined(X11_CLIPBOARD)
         return &Clipboard::Backends::X11::getInstance();
-#elif defined(PLATFORM_WLROOTS)
+#elif defined(WLROOTS_CLIPBOARD)
         return &Clipboard::Backends::WLRoots::getInstance();
 #else
         return nullptr;

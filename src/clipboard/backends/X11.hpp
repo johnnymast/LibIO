@@ -1,7 +1,7 @@
 #pragma once
 #include "LibIO/ClipboardControls.hpp"
 
-#if PLATFORM_X11
+#if X11_CLIPBOARD
 #include <X11/Xlib.h>
 
 #include <string>
