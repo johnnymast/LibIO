@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <algorithm>
+#include <climits>
 
 namespace LibIO::Keyboard::Backends {
     std::unordered_map<char, std::pair<std::string, std::string> > WLRoots::SpecialCharacterMap = {
@@ -155,6 +156,15 @@ namespace LibIO::Keyboard::Backends {
             return;
         }
 
+        // XKB modifier indices ophalen
+        xkb_mod_index_t shiftIdx = xkb_keymap_mod_get_index(keymap, "Shift");
+        xkb_mod_index_t ctrlIdx = xkb_keymap_mod_get_index(keymap, "Control");
+        xkb_mod_index_t altIdx = xkb_keymap_mod_get_index(keymap, "Mod1");
+
+        modShift = (shiftIdx == XKB_MOD_INVALID ? UINT32_MAX : static_cast<uint32_t>(shiftIdx));
+        modCtrl = (ctrlIdx == XKB_MOD_INVALID ? UINT32_MAX : static_cast<uint32_t>(ctrlIdx));
+        modAlt = (altIdx == XKB_MOD_INVALID ? UINT32_MAX : static_cast<uint32_t>(altIdx));
+
         char *keymap_str = xkb_keymap_get_as_string(keymap, XKB_KEYMAP_FORMAT_TEXT_V1);
         if (!keymap_str) {
             xkb_keymap_unref(keymap);
@@ -245,12 +255,13 @@ namespace LibIO::Keyboard::Backends {
         if (!code)
             return;
 
+        // zwp_virtual_keyboard_v1_key verwacht evdev KEY_* codes, geen offset
         zwp_virtual_keyboard_v1_key(vk, 0, code, WL_KEYBOARD_KEY_STATE_PRESSED);
         zwp_virtual_keyboard_v1_key(vk, 10, code, WL_KEYBOARD_KEY_STATE_RELEASED);
         wl_display_flush(display);
     }
 
-    void WLRoots::Hotkey(const std::string& modifier, const std::string& key) {
+    void WLRoots::Hotkey(const std::string &modifier, const std::string &key) {
         if (!vk || !display)
             return;
 
@@ -265,21 +276,19 @@ namespace LibIO::Keyboard::Backends {
         if (!mod.empty())
             modifiers.push_back(mod);
 
-        uint32_t depressedMask = 0;
-
-        // Build modifier bitmask
-        for (auto& m : modifiers) {
+        // Map modifiers naar KEY_* codes
+        std::vector<uint32_t> modKeycodes;
+        for (auto &m: modifiers) {
             std::string lower = ToLower(m);
-
             if (lower == "shift")
-                depressedMask |= (1 << 0);   // shift
+                modKeycodes.push_back(KEY_LEFTSHIFT);
             else if (lower == "ctrl" || lower == "control")
-                depressedMask |= (1 << 2);   // ctrl
+                modKeycodes.push_back(KEY_LEFTCTRL);
             else if (lower == "alt")
-                depressedMask |= (1 << 3);   // alt
+                modKeycodes.push_back(KEY_LEFTALT);
         }
 
-        // Lookup keycode
+        // Lookup main keycode
         std::string lowerKey = ToLower(key);
         uint32_t keyCode = 0;
 
@@ -296,21 +305,26 @@ namespace LibIO::Keyboard::Backends {
         if (!keyCode)
             return;
 
-        // Apply modifiers
-        zwp_virtual_keyboard_v1_modifiers(vk, depressedMask, 0, 0, 0);
+        // 1) Modifiers down
+        for (uint32_t mk: modKeycodes) {
+            zwp_virtual_keyboard_v1_key(vk, 0, mk, WL_KEYBOARD_KEY_STATE_PRESSED);
+        }
         wl_display_flush(display);
 
-        // Press key
+        // 2) Main key down
         zwp_virtual_keyboard_v1_key(vk, 0, keyCode, WL_KEYBOARD_KEY_STATE_PRESSED);
         wl_display_flush(display);
 
-        // Release key
+        // 3) Main key up
         zwp_virtual_keyboard_v1_key(vk, 10, keyCode, WL_KEYBOARD_KEY_STATE_RELEASED);
         wl_display_flush(display);
 
-        // Clear modifiers
-        zwp_virtual_keyboard_v1_modifiers(vk, 0, 0, 0, 0);
+        // 4) Modifiers up (reverse order)
+        for (auto itMod = modKeycodes.rbegin(); itMod != modKeycodes.rend(); ++itMod) {
+            zwp_virtual_keyboard_v1_key(vk, 20, *itMod, WL_KEYBOARD_KEY_STATE_RELEASED);
+        }
         wl_display_flush(display);
     }
 }
+
 #endif
