@@ -30,10 +30,15 @@ namespace LibIO::Keyboard::Backends {
         zwp_virtual_keyboard_manager_v1* vk_manager = nullptr;
         zwp_virtual_keyboard_v1* vk = nullptr;
 
-        // XKB modifier indices (bit positions in zwp_virtual_keyboard_v1_modifiers)
         uint32_t modShift = 0xFFFFFFFFu;
         uint32_t modCtrl  = 0xFFFFFFFFu;
         uint32_t modAlt   = 0xFFFFFFFFu;
+
+        bool shiftDown = false;
+        bool ctrlDown  = false;
+        bool altDown   = false;
+
+        void updateModifiers(bool ctrl, bool shift, bool alt);
 
         static void registryHandler(void*, wl_registry*, uint32_t, const char*, uint32_t);
         static void registryRemover(void*, wl_registry*, uint32_t);
