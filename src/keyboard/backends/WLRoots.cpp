@@ -9,30 +9,18 @@
 #include <fcntl.h>
 #include <cstring>
 #include <algorithm>
+#include <climits>
 
 namespace LibIO::Keyboard::Backends {
-    std::unordered_map<char, std::pair<std::string, std::string> > WLRoots::SpecialCharacterMap = {
-        {'@', {"shift", "2"}},
-        {'#', {"shift", "3"}},
-        {'$', {"shift", "4"}},
-        {'%', {"shift", "5"}},
-        {'^', {"shift", "6"}},
-        {'&', {"shift", "7"}},
-        {'*', {"shift", "8"}},
-        {'(', {"shift", "9"}},
-        {')', {"shift", "0"}},
-        {'_', {"shift", "-"}},
-        {'+', {"shift", "="}},
-        {'{', {"shift", "["}},
-        {'}', {"shift", "]"}},
-        {'|', {"shift", "\\"}},
-        {':', {"shift", ";"}},
-        {'"', {"shift", "'"}},
-        {'<', {"shift", ","}},
-        {'>', {"shift", "."}},
-        {'?', {"shift", "/"}},
-        {'!', {"shift", "1"}},
-        {'~', {"shift", "`"}}
+
+    std::unordered_map<char, std::pair<std::string, std::string>> WLRoots::SpecialCharacterMap = {
+        {'@', {"shift", "2"}}, {'#', {"shift", "3"}}, {'$', {"shift", "4"}},
+        {'%', {"shift", "5"}}, {'^', {"shift", "6"}}, {'&', {"shift", "7"}},
+        {'*', {"shift", "8"}}, {'(', {"shift", "9"}}, {')', {"shift", "0"}},
+        {'_', {"shift", "-"}}, {'+', {"shift", "="}}, {'{', {"shift", "["}},
+        {'}', {"shift", "]"}}, {'|', {"shift", "\\"}}, {':', {"shift", ";"}},
+        {'"', {"shift", "'"}}, {'<', {"shift", ","}}, {'>', {"shift", "."}},
+        {'?', {"shift", "/"}}, {'!', {"shift", "1"}}, {'~', {"shift", "`"}}
     };
 
     std::unordered_map<std::string, uint32_t> WLRoots::KeyCodes = {
@@ -53,8 +41,8 @@ namespace LibIO::Keyboard::Backends {
         {"capslock", KEY_CAPSLOCK}, {"numlock", KEY_NUMLOCK}, {"scrolllock", KEY_SCROLLLOCK},
 
         {",", KEY_COMMA}, {".", KEY_DOT}, {"/", KEY_SLASH}, {";", KEY_SEMICOLON},
-        {"'", KEY_APOSTROPHE}, {"[", KEY_LEFTBRACE}, {"]", KEY_RIGHTBRACE}, {"-", KEY_MINUS},
-        {"=", KEY_EQUAL}, {"`", KEY_GRAVE}, {"\\", KEY_BACKSLASH},
+        {"'", KEY_APOSTROPHE}, {"[", KEY_LEFTBRACE}, {"]", KEY_RIGHTBRACE},
+        {"-", KEY_MINUS}, {"=", KEY_EQUAL}, {"`", KEY_GRAVE}, {"\\", KEY_BACKSLASH},
 
         {"0", KEY_0}, {"1", KEY_1}, {"2", KEY_2}, {"3", KEY_3},
         {"4", KEY_4}, {"5", KEY_5}, {"6", KEY_6}, {"7", KEY_7},
@@ -71,19 +59,17 @@ namespace LibIO::Keyboard::Backends {
         {" ", KEY_SPACE}
     };
 
-    KeyboardControls &WLRoots::getInstance() {
+    KeyboardControls& WLRoots::getInstance() {
         static WLRoots instance;
         return instance;
     }
 
     WLRoots::WLRoots() {
         display = wl_display_connect(nullptr);
-        if (!display)
-            return;
+        if (!display) return;
 
         registry = wl_display_get_registry(display);
-        if (!registry)
-            return;
+        if (!registry) return;
 
         static const wl_registry_listener regListener = {
             .global = registryHandler,
@@ -100,38 +86,30 @@ namespace LibIO::Keyboard::Backends {
     }
 
     WLRoots::~WLRoots() {
-        if (vk)
-            zwp_virtual_keyboard_v1_destroy(vk);
-        if (vk_manager)
-            zwp_virtual_keyboard_manager_v1_destroy(vk_manager);
-        if (seat)
-            wl_seat_destroy(seat);
-        if (registry)
-            wl_registry_destroy(registry);
-        if (display)
-            wl_display_disconnect(display);
+        if (vk) zwp_virtual_keyboard_v1_destroy(vk);
+        if (vk_manager) zwp_virtual_keyboard_manager_v1_destroy(vk_manager);
+        if (seat) wl_seat_destroy(seat);
+        if (registry) wl_registry_destroy(registry);
+        if (display) wl_display_disconnect(display);
     }
 
-    void WLRoots::registryHandler(void *data, wl_registry *reg, uint32_t name, const char *interface,
-                                  uint32_t version) {
-        auto *self = static_cast<WLRoots *>(data);
+    void WLRoots::registryHandler(void* data, wl_registry* reg, uint32_t name, const char* interface, uint32_t) {
+        auto* self = static_cast<WLRoots*>(data);
 
         if (strcmp(interface, wl_seat_interface.name) == 0)
-            self->seat = static_cast<wl_seat *>(wl_registry_bind(reg, name, &wl_seat_interface, 1));
+            self->seat = static_cast<wl_seat*>(wl_registry_bind(reg, name, &wl_seat_interface, 1));
 
         if (strcmp(interface, zwp_virtual_keyboard_manager_v1_interface.name) == 0)
-            self->vk_manager = static_cast<zwp_virtual_keyboard_manager_v1 *>(
+            self->vk_manager = static_cast<zwp_virtual_keyboard_manager_v1*>(
                 wl_registry_bind(reg, name, &zwp_virtual_keyboard_manager_v1_interface, 1)
             );
     }
 
-    void WLRoots::registryRemover(void *, wl_registry *, uint32_t) {
-    }
+    void WLRoots::registryRemover(void*, wl_registry*, uint32_t) {}
 
     int WLRoots::create_anonymous_file(off_t size) {
         int fd = syscall(SYS_memfd_create, "vk-keymap", MFD_CLOEXEC);
-        if (fd < 0)
-            return -1;
+        if (fd < 0) return -1;
         if (ftruncate(fd, size) < 0) {
             close(fd);
             return -1;
@@ -140,22 +118,29 @@ namespace LibIO::Keyboard::Backends {
     }
 
     void WLRoots::setup_keymap() {
-        xkb_context *ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
-        if (!ctx)
-            return;
+        xkb_context* ctx = xkb_context_new(XKB_CONTEXT_NO_FLAGS);
+        if (!ctx) return;
 
         xkb_rule_names names = {};
         names.rules = "evdev";
         names.model = "pc105";
         names.layout = "us";
 
-        xkb_keymap *keymap = xkb_keymap_new_from_names(ctx, &names, XKB_KEYMAP_COMPILE_NO_FLAGS);
+        xkb_keymap* keymap = xkb_keymap_new_from_names(ctx, &names, XKB_KEYMAP_COMPILE_NO_FLAGS);
         if (!keymap) {
             xkb_context_unref(ctx);
             return;
         }
 
-        char *keymap_str = xkb_keymap_get_as_string(keymap, XKB_KEYMAP_FORMAT_TEXT_V1);
+        xkb_mod_index_t shiftIdx = xkb_keymap_mod_get_index(keymap, "Shift");
+        xkb_mod_index_t ctrlIdx  = xkb_keymap_mod_get_index(keymap, "Control");
+        xkb_mod_index_t altIdx   = xkb_keymap_mod_get_index(keymap, "Mod1");
+
+        modShift = (shiftIdx == XKB_MOD_INVALID ? UINT32_MAX : (uint32_t)shiftIdx);
+        modCtrl  = (ctrlIdx  == XKB_MOD_INVALID ? UINT32_MAX : (uint32_t)ctrlIdx);
+        modAlt   = (altIdx   == XKB_MOD_INVALID ? UINT32_MAX : (uint32_t)altIdx);
+
+        char* keymap_str = xkb_keymap_get_as_string(keymap, XKB_KEYMAP_FORMAT_TEXT_V1);
         if (!keymap_str) {
             xkb_keymap_unref(keymap);
             xkb_context_unref(ctx);
@@ -171,7 +156,7 @@ namespace LibIO::Keyboard::Backends {
             return;
         }
 
-        void *map = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        void* map = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
         if (map == MAP_FAILED) {
             close(fd);
             free(keymap_str);
@@ -183,12 +168,7 @@ namespace LibIO::Keyboard::Backends {
         memcpy(map, keymap_str, size);
         munmap(map, size);
 
-        zwp_virtual_keyboard_v1_keymap(
-            vk,
-            XKB_KEYMAP_FORMAT_TEXT_V1,
-            fd,
-            size
-        );
+        zwp_virtual_keyboard_v1_keymap(vk, XKB_KEYMAP_FORMAT_TEXT_V1, fd, size);
 
         close(fd);
         free(keymap_str);
@@ -196,18 +176,30 @@ namespace LibIO::Keyboard::Backends {
         xkb_context_unref(ctx);
     }
 
-    std::string WLRoots::ToLower(const std::string &s) {
+    std::string WLRoots::ToLower(const std::string& s) {
         std::string out = s;
         std::transform(out.begin(), out.end(), out.begin(), ::tolower);
         return out;
     }
 
-    void WLRoots::PressKey(const std::string &key) {
-        if (!vk || !display)
-            return;
+    void WLRoots::updateModifiers(bool ctrl, bool shift, bool alt) {
+        ctrlDown = ctrl;
+        shiftDown = shift;
+        altDown = alt;
 
-        if (key.empty())
-            return;
+        uint32_t depressed = 0;
+
+        if (ctrlDown  && modCtrl  != UINT32_MAX) depressed |= (1u << modCtrl);
+        if (shiftDown && modShift != UINT32_MAX) depressed |= (1u << modShift);
+        if (altDown   && modAlt   != UINT32_MAX) depressed |= (1u << modAlt);
+
+        zwp_virtual_keyboard_v1_modifiers(vk, depressed, 0, 0, 0);
+        wl_display_flush(display);
+    }
+
+    void WLRoots::PressKey(const std::string& key) {
+        if (!vk || !display) return;
+        if (key.empty()) return;
 
         if (key == "\n") {
             PressKey("enter");
@@ -231,8 +223,8 @@ namespace LibIO::Keyboard::Backends {
             code = it->second;
         } else if (key.size() == 1) {
             char c = key[0];
-            if (std::isupper(static_cast<unsigned char>(c))) {
-                std::string base(1, static_cast<char>(std::tolower(c)));
+            if (std::isupper((unsigned char)c)) {
+                std::string base(1, (char)std::tolower(c));
                 Hotkey("shift", base);
                 return;
             }
@@ -242,8 +234,7 @@ namespace LibIO::Keyboard::Backends {
                 code = it2->second;
         }
 
-        if (!code)
-            return;
+        if (!code) return;
 
         zwp_virtual_keyboard_v1_key(vk, 0, code, WL_KEYBOARD_KEY_STATE_PRESSED);
         zwp_virtual_keyboard_v1_key(vk, 10, code, WL_KEYBOARD_KEY_STATE_RELEASED);
@@ -251,10 +242,8 @@ namespace LibIO::Keyboard::Backends {
     }
 
     void WLRoots::Hotkey(const std::string& modifier, const std::string& key) {
-        if (!vk || !display)
-            return;
+        if (!vk || !display) return;
 
-        // Parse modifiers (supports "ctrl+shift" etc.)
         std::string mod = modifier;
         std::vector<std::string> modifiers;
         size_t pos = 0;
@@ -265,21 +254,23 @@ namespace LibIO::Keyboard::Backends {
         if (!mod.empty())
             modifiers.push_back(mod);
 
-        uint32_t depressedMask = 0;
+        std::vector<uint32_t> modKeycodes;
+        bool wantCtrl = false, wantShift = false, wantAlt = false;
 
-        // Build modifier bitmask
         for (auto& m : modifiers) {
             std::string lower = ToLower(m);
-
-            if (lower == "shift")
-                depressedMask |= (1 << 0);   // shift
-            else if (lower == "ctrl" || lower == "control")
-                depressedMask |= (1 << 2);   // ctrl
-            else if (lower == "alt")
-                depressedMask |= (1 << 3);   // alt
+            if (lower == "shift") {
+                modKeycodes.push_back(KEY_LEFTSHIFT);
+                wantShift = true;
+            } else if (lower == "ctrl" || lower == "control") {
+                modKeycodes.push_back(KEY_LEFTCTRL);
+                wantCtrl = true;
+            } else if (lower == "alt") {
+                modKeycodes.push_back(KEY_LEFTALT);
+                wantAlt = true;
+            }
         }
 
-        // Lookup keycode
         std::string lowerKey = ToLower(key);
         uint32_t keyCode = 0;
 
@@ -293,24 +284,25 @@ namespace LibIO::Keyboard::Backends {
                 keyCode = it2->second;
         }
 
-        if (!keyCode)
-            return;
+        if (!keyCode) return;
 
-        // Apply modifiers
-        zwp_virtual_keyboard_v1_modifiers(vk, depressedMask, 0, 0, 0);
-        wl_display_flush(display);
+        for (uint32_t mk : modKeycodes)
+            zwp_virtual_keyboard_v1_key(vk, 0, mk, WL_KEYBOARD_KEY_STATE_PRESSED);
 
-        // Press key
+        updateModifiers(wantCtrl, wantShift, wantAlt);
+
         zwp_virtual_keyboard_v1_key(vk, 0, keyCode, WL_KEYBOARD_KEY_STATE_PRESSED);
         wl_display_flush(display);
 
-        // Release key
         zwp_virtual_keyboard_v1_key(vk, 10, keyCode, WL_KEYBOARD_KEY_STATE_RELEASED);
         wl_display_flush(display);
 
-        // Clear modifiers
-        zwp_virtual_keyboard_v1_modifiers(vk, 0, 0, 0, 0);
-        wl_display_flush(display);
+        for (auto itMod = modKeycodes.rbegin(); itMod != modKeycodes.rend(); ++itMod)
+            zwp_virtual_keyboard_v1_key(vk, 20, *itMod, WL_KEYBOARD_KEY_STATE_RELEASED);
+
+        updateModifiers(false, false, false);
     }
+
 }
+
 #endif

@@ -1,6 +1,6 @@
 #include "X11.hpp"
 
-#if PLATFORM_X11
+#if X11_CLIPBOARD
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 
