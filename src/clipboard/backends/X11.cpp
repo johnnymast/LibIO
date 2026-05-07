@@ -110,48 +110,65 @@ namespace LibIO::Clipboard::Backends {
                 }
             } else {
                 // Geen relevante events: even pauze
-                std::this_thread::sleep_for(std::chrono::milliseconds(5));
+                std::this_thread::sleep_for(std::chrono::milliseconds(50));
             }
         }
     }
 
 
     std::string X11::Paste() {
-        initX11();
-        if (!initialized || !display || window == 0) return "";
-
-        // If we are the owner, return local buffer
-        if (XGetSelectionOwner(display, clipboardAtom) == window) {
-            std::lock_guard<std::mutex> lock(clipboardMutex);
-            return clipboardContent;
+        // Gebruik een eigen Display voor paste, zodat andere event-loops
+        // onze SelectionNotify niet kunnen "opeten".
+        Display *dpy = XOpenDisplay(nullptr);
+        if (!dpy) {
+            return "";
         }
 
-        Atom property = XInternAtom(display, "COPIED_TEXT", False);
+        Window win = XCreateSimpleWindow(
+            dpy,
+            DefaultRootWindow(dpy),
+            0, 0, 1, 1, 0, 0, 0
+        );
+
+        Atom clipboardAtom = XInternAtom(dpy, "CLIPBOARD", False);
+        Atom utf8Atom = XInternAtom(dpy, "UTF8_STRING", False);
+        Atom stringAtom = XInternAtom(dpy, "STRING", False);
+        Atom propertyAtom = XInternAtom(dpy, "COPIED_TEXT", False);
 
         auto convertAndWait = [&](Atom target) -> std::string {
-            XConvertSelection(display, clipboardAtom, target, property, window, CurrentTime);
-            XSync(display, False);
+            XConvertSelection(dpy, clipboardAtom, target, propertyAtom, win, CurrentTime);
+            XFlush(dpy);
 
             std::string result;
             auto deadline = std::chrono::steady_clock::now() + std::chrono::milliseconds(500);
 
             while (std::chrono::steady_clock::now() < deadline) {
-                if (XPending(display)) {
-                    XEvent event;
-                    XNextEvent(display, &event);
+                if (XPending(dpy)) {
+                    XEvent ev;
+                    XNextEvent(dpy, &ev);
 
-                    if (event.type == SelectionNotify) {
-                        if (event.xselection.property) {
+                    if (ev.type == SelectionNotify && ev.xselection.requestor == win) {
+                        if (ev.xselection.property != None) {
                             Atom actualType;
                             int actualFormat;
                             unsigned long nItems, bytesAfter;
                             unsigned char *data = nullptr;
 
-                            if (Success == XGetWindowProperty(display, window, event.xselection.property,
-                                                              0, (~0L), True, AnyPropertyType,
-                                                              &actualType, &actualFormat,
-                                                              &nItems, &bytesAfter, &data)) {
-                                if (data) {
+                            if (Success == XGetWindowProperty(
+                                    dpy,
+                                    win,
+                                    ev.xselection.property,
+                                    0,
+                                    (~0L),
+                                    True,
+                                    AnyPropertyType,
+                                    &actualType,
+                                    &actualFormat,
+                                    &nItems,
+                                    &bytesAfter,
+                                    &data
+                                )) {
+                                if (data && nItems > 0) {
                                     result.assign(reinterpret_cast<char *>(data), nItems);
                                     XFree(data);
                                 }
@@ -163,6 +180,7 @@ namespace LibIO::Clipboard::Backends {
                     std::this_thread::sleep_for(std::chrono::milliseconds(5));
                 }
             }
+
             return result;
         };
 
@@ -170,8 +188,13 @@ namespace LibIO::Clipboard::Backends {
         if (result.empty()) {
             result = convertAndWait(stringAtom);
         }
+
+        XDestroyWindow(dpy, win);
+        XCloseDisplay(dpy);
+
         return result;
     }
+
 
     void X11::Clear() {
         initX11();
