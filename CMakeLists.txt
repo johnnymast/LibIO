@@ -41,10 +41,13 @@ endif ()
 # Library
 # ---------------------------------------------------------
 add_library(${PROJECT_NAME} SHARED
+        include/private/LibIO/MainThreadExecutor.hpp
+
         src/MouseControls.cpp
         src/ClipboardControls.cpp
         src/KeyboardControls.cpp
         src/LibIO.cpp
+
 )
 
 if (WINDOWS_PLATFORM)
