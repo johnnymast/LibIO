@@ -32,7 +32,7 @@ endif ()
 if (NOT (WINDOWS_MOUSE OR X11_MOUSE OR WLROOTS_MOUSE))
     message(FATAL_ERROR
             "No mouse backend selected. Enable at least one of the following: "
-            "WINDOWS_KEYBOARD, X11_MOUSE, WLROOTS_MOUSE."
+            "WINDOWS_MOUSE, X11_MOUSE, WLROOTS_MOUSE."
     )
 endif ()
 
