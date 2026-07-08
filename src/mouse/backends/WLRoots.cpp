@@ -160,11 +160,11 @@ namespace LibIO::Mouse::Backends {
     }
 
     void WLRoots::ScrollUp(int amount) {
-        Scroll(+amount, nullptr, nullptr);
+        Scroll(-amount, nullptr, nullptr);
     }
 
     void WLRoots::ScrollDown(int amount) {
-        Scroll(-amount, nullptr, nullptr);
+        Scroll(amount, nullptr, nullptr);
     }
 }
 

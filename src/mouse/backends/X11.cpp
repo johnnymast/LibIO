@@ -107,11 +107,11 @@ namespace LibIO::Mouse::Backends {
     }
 
     void X11::ScrollUp(const int amount) {
-        Scroll(amount, nullptr, nullptr);
+        Scroll(-amount, nullptr, nullptr);
     }
 
     void X11::ScrollDown(const int amount) {
-        Scroll(-amount, nullptr, nullptr);
+        Scroll(amount, nullptr, nullptr);
     }
 }
 #endif

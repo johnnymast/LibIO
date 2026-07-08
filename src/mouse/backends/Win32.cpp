@@ -46,11 +46,11 @@ namespace LibIO::Mouse::Backends {
     }
 
     void Win32::ScrollUp(int amount) {
-        Scroll(amount, nullptr, nullptr);
+        Scroll(-amount, nullptr, nullptr);
     }
 
     void Win32::ScrollDown(int amount) {
-        Scroll(-amount, nullptr, nullptr);
+        Scroll(amount, nullptr, nullptr);
     }
 }
 #endif
