@@ -10,7 +10,7 @@ namespace LibIO::Clipboard::Backends {
         return instance;
     }
 
-    void Win32::Copy(std::string text) {
+    void Win32::DoCopy(std::string text) {
         if (!OpenClipboard(nullptr)) return;
         EmptyClipboard();
 
@@ -31,7 +31,7 @@ namespace LibIO::Clipboard::Backends {
         CloseClipboard();
     }
 
-    std::string Win32::Paste() {
+    std::string Win32::DoPaste() {
         if (!OpenClipboard(nullptr)) return "";
 
         HANDLE hData = GetClipboardData(CF_TEXT);
@@ -51,7 +51,7 @@ namespace LibIO::Clipboard::Backends {
         return result;
     }
 
-    void Win32::Clear() {
+    void Win32::DoClear() {
         if (OpenClipboard(nullptr)) {
             EmptyClipboard();
             CloseClipboard();

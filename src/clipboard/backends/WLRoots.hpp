@@ -15,11 +15,12 @@ namespace LibIO::Clipboard::Backends {
 
         static ClipboardControls &getInstance();
 
-        void Copy(std::string text) override;
+    protected:
+        void DoCopy(std::string text) override;
 
-        std::string Paste() override;
+        std::string DoPaste() override;
 
-        void Clear() override;
+        void DoClear() override;
 
     private:
         WLRoots();

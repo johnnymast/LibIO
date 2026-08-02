@@ -21,9 +21,10 @@ namespace LibIO::Clipboard::Backends {
 
         static ClipboardControls &getInstance();
 
-        void Copy(std::string text) override;
-        std::string Paste() override;
-        void Clear() override;
+    protected:
+        void DoCopy(std::string text) override;
+        std::string DoPaste() override;
+        void DoClear() override;
 
     private:
         // X11 thread

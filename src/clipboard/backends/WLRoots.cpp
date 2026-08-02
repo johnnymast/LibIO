@@ -95,7 +95,7 @@ namespace LibIO::Clipboard::Backends {
     void WLRoots::dataDevicePrimarySelection(void *, zwlr_data_control_device_v1 *, zwlr_data_control_offer_v1 *) {
     }
 
-    void WLRoots::Copy(std::string text) {
+    void WLRoots::DoCopy(std::string text) {
         if (!manager || !device)
             return;
 
@@ -128,12 +128,12 @@ namespace LibIO::Clipboard::Backends {
         wl_display_flush(display);
     }
 
-    std::string WLRoots::Paste() {
+    std::string WLRoots::DoPaste() {
         std::lock_guard<std::mutex> lock(clipboardMutex);
         return lastClipboard;
     }
 
-    void WLRoots::Clear() {
+    void WLRoots::DoClear() {
         std::lock_guard<std::mutex> lock(clipboardMutex);
         lastClipboard.clear();
     }

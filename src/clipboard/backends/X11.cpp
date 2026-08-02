@@ -172,7 +172,7 @@ namespace LibIO::Clipboard::Backends {
     // ------------------------------------------------------------
     // Public Copy() — runs on X11 thread
     // ------------------------------------------------------------
-    void X11::Copy(std::string text) {
+    void X11::DoCopy(std::string text) {
         enqueue([this, text = std::move(text)] {
             if (!initialized) return;
 
@@ -192,7 +192,7 @@ namespace LibIO::Clipboard::Backends {
     // ------------------------------------------------------------
     // Public Paste() — uses isolated Display (safe)
     // ------------------------------------------------------------
-    std::string X11::Paste() {
+    std::string X11::DoPaste() {
         Display *dpy = XOpenDisplay(nullptr);
         if (!dpy) return "";
 
@@ -261,13 +261,23 @@ namespace LibIO::Clipboard::Backends {
     // ------------------------------------------------------------
     // Clear clipboard
     // ------------------------------------------------------------
-    void X11::Clear() {
+    void X11::DoClear() {
         enqueue([this] {
             if (!initialized) return;
 
             {
                 std::lock_guard<std::mutex> lock(clipboardMutex);
                 clipboardContent.clear();
+            }
+
+            /**
+             * In X11 mag elke client de owner van een selection zetten, ook als
+             * hij hem niet bezit. Onvoorwaardelijk disownen sloopt dus de
+             * selectie die de game (Wine) net gepubliceerd heeft na een klik.
+             * Alleen loslaten wat van onszelf is.
+             */
+            if (XGetSelectionOwner(display, clipboardAtom) != window) {
+                return;
             }
 
             XSetSelectionOwner(display, clipboardAtom, None, CurrentTime);
