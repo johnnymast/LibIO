@@ -1,4 +1,7 @@
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+    find_library(X11_LIB X11 PATHS /usr/lib NO_DEFAULT_PATH)
+    find_path(X11_INCLUDE_DIR X11/Xlib.h PATHS /usr/include NO_DEFAULT_PATH)
     find_package(X11 REQUIRED)
 
     find_package(PkgConfig REQUIRED)
