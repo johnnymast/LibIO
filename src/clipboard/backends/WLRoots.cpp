@@ -18,7 +18,7 @@ namespace LibIO::Clipboard::Backends {
         registry = wl_display_get_registry(display);
         if (!registry)
             return;
-
+`
         static const wl_registry_listener regListener = {
             .global = registryHandler,
             .global_remove = registryRemover
